@@ -1,0 +1,23 @@
+nav{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button{
+        font-size: var(--normalText);
+        margin: 0 0.5rem;
+    }
+
+    button.active{
+        background-color: gray;
+    }
+
+    .toggle{
+        margin: 0 0.5rem;
+    }
+
+    .select{
+        margin: 0 0.5rem;
+    }
+}

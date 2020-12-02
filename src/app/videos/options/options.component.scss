@@ -1,0 +1,16 @@
+.container{
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    
+    .toggle{
+        margin: 1rem 0;
+    }
+    .progress-bar{
+
+    }
+}

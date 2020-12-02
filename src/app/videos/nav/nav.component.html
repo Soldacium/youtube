@@ -1,0 +1,57 @@
+
+<nav>
+    <!--
+    <button 
+    mat-stroked-button 
+    [ngClass]="(mode==='all')?'active':''"
+    (click)='setDisplayMode("all")'>All</button>
+    <button 
+    mat-stroked-button 
+    [ngClass]="mode === 'yt'?'active':''"
+    (click)='setDisplayMode("yt")'>Youtube</button>
+    <button 
+    mat-stroked-button 
+    [ngClass]="mode === 'vim'?'active':''"
+    (click)='setDisplayMode("vim")'>Vimeo</button>
+    <button 
+    mat-stroked-button 
+    [ngClass]="mode==='fav'?'active':''"
+    (click)='setDisplayMode("fav")'>Favourites</button>        
+    -->
+
+
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
+        <mat-button-toggle value="left" aria-label="Text align left">
+            All
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center">
+            Favourite
+        </mat-button-toggle>   
+        <mat-button-toggle value="left" aria-label="Text align left">
+            Youtube
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center">
+            Vimeo
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+    
+
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
+        <mat-button-toggle value="left" aria-label="Text align left">
+            <mat-icon>play_arrow</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center">
+            <mat-icon>view_module</mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-form-field appearance="fill" class="select">
+        <mat-label>Sort by</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let sort of sorts" [value]="sort.value">
+            {{sort.viewValue}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+</nav>

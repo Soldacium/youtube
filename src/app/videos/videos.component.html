@@ -1,0 +1,27 @@
+
+<mat-drawer-container class="container" autosize>
+
+    <mat-drawer #drawer class="options" mode="push" position="end">
+        <app-options></app-options>
+    </mat-drawer>
+    <div class="content">
+        <app-add></app-add>
+        <app-nav></app-nav>
+        <app-display></app-display>
+
+
+        <button 
+        type="button" 
+        class="toggle-options" 
+        mat-button (click)="drawer.toggle()"
+        mat-icon-button color="accent" 
+        aria-label="Example icon button with a menu icon">
+            <mat-icon>menu</mat-icon>
+        </button>
+        
+
+    </div>
+
+
+  
+</mat-drawer-container>

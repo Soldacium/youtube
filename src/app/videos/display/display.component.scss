@@ -1,0 +1,58 @@
+.container{
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    align-items: flex-start;
+    padding: 0 10rem;
+
+    mat-paginator{
+        width: 100%;
+        margin: 3rem 0;
+        background-color: transparent;
+    }
+}
+
+.youtube{
+    border: 1px solid rgb(201, 201, 201);
+    flex: 1 1 30rem;
+    height: 30vh;
+    margin: 1rem 1.5rem;
+    background-color: white;
+    transition: 0.3s box-shadow ease;
+    overflow: hidden;
+    position: relative;
+
+    &:hover{
+        box-shadow: 0 0 17px 9px rgba(0, 0, 0, 0.123);
+        cursor: pointer;
+
+    }
+
+    .options{
+        display: hidden;
+        position: absolute;
+        left: -1rem;
+        top: -1rem;
+
+
+
+    }
+
+    &:hover .options{
+        display: flex;
+    }
+
+
+    .desc{
+        position: absolute;
+        bottom: 0;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        
+    }
+}

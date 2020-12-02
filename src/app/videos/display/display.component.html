@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="youtube" *ngFor='let video of videos'>
+        <div class="image">
+
+        </div>
+        <div class="desc">
+            <div>Video {{video}}</div>
+            <div>Video {{video}}</div>
+            <div>Video {{video}}</div>
+        </div>
+        <div class="options">
+
+        </div>
+    </div>
+
+    <mat-paginator [length]="100"
+              [pageSize]="6"
+              [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</div>
