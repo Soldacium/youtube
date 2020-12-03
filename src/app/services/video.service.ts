@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Video } from '../models/video.model'
+import { Video } from '../models/video.model';
 
 
 @Injectable({
@@ -9,7 +9,7 @@ export class VideoService {
 
   constructor() { }
 
-  //$client = new Vimeo("{client_id}", "{client_secret}", "{access_token}");
+  // $client = new Vimeo("{client_id}", "{client_secret}", "{access_token}");
 
   keys = {
     settings: 'sett',
@@ -19,6 +19,31 @@ export class VideoService {
 
   localStorage = localStorage;
   videos: Video[] = [];
+  searchedVideos = [];
+
+
+
+  searchOptions = {
+    videos: 'all',
+    sort: 'descending',
+    display: 'blocks'
+
+  };
+
+  updateSearchOptions(typeOfVideos: string, sortOrder: string, videoDisplay: string){
+    if (sortOrder !== this.searchOptions.sort){
+      this.sortVideosByDate(sortOrder);
+    }
+
+    this.searchOptions = {
+      videos: typeOfVideos,
+      sort: sortOrder,
+      display: videoDisplay
+
+    };
+
+
+  }
 
 
   getVideoInfo(id: string){
@@ -31,21 +56,38 @@ export class VideoService {
     this.videos = JSON.parse(localStorage.getItem(this.keys.videos) || '{}');
   }
 
-  sortVideosByDate(){
+  sortVideosByDate(order: string){
+    if (order === 'descending'){
+
+    }else{
+
+    }
+  }
+
+  getVideosFromPage(page: number, itemsPerPage: number){
+
+    const min = (page - 1) * itemsPerPage;
+
+    for (let i = min; i < min + itemsPerPage; i++){
+      if (this.videos[i]){
+        this.getVideoInfo(this.videos[i].id);
+      }
+    }
+
+    return [];
+  }
+
+  checkIfVideoExists(id: string, type: string){
 
   }
 
-  getVideosFromPage(page: number){
-
-  }
-
-  addVideo(id: string, address: string, type: string){
+  addVideo(id: string, type: string){
     const video: Video = {
-      id: id,
-      type: type,
+      id,
+      type,
       favourite: false,
       modifyDate: new Date()
-    }
+    };
 
     this.videos.push(video);
     this.updateLocalStorage();

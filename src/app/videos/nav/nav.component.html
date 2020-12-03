@@ -21,7 +21,7 @@
 
 
     <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
-        <mat-button-toggle value="left" aria-label="Text align left">
+        <mat-button-toggle value="left" aria-label="Text align left" selected>
             All
         </mat-button-toggle>
         <mat-button-toggle value="center" aria-label="Text align center">
@@ -45,6 +45,16 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
+        <mat-button-toggle value="left" aria-label="Text align left">
+            <mat-icon>play_arrow</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center">
+            <mat-icon>view_module</mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <!--
     <mat-form-field appearance="fill" class="select">
         <mat-label>Sort by</mat-label>
         <mat-select>
@@ -53,5 +63,7 @@
           </mat-option>
         </mat-select>
     </mat-form-field>
+    -->
+
 
 </nav>

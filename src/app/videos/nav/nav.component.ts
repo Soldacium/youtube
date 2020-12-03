@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { VideoService } from 'src/app/services/video.service';
 
 @Component({
   selector: 'app-nav',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  constructor() { }
+  constructor(private videoService: VideoService) { }
 
   mode = '';
 
@@ -16,23 +17,31 @@ export class NavComponent implements OnInit {
     {value: 'descending', viewValue: 'Descending'},
     {value: 'ascending', viewValue: 'Ascending'},
   ];
- 
-  
+
+  searchOptions = {
+
+  }
+
+
 
   ngOnInit(): void {
+    this.searchOptions = this.videoService.searchOptions;
   }
 
   setDisplayMode(mode: string){
-    if(this.mode !== mode){
-      this.mode == mode;
+    if (this.mode !== mode){
+      this.mode === mode;
     }else{
-      this.mode == 'all';
+      this.mode === 'all';
     }
 
-    console.log('lol')
+  }
+
+  updateOptions(){
+    //this.videoService.updateSearchOptions()
   }
 
 
-  
+
 
 }
