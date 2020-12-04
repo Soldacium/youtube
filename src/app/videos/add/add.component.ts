@@ -8,20 +8,29 @@ import { VideoService } from 'src/app/services/video.service';
 })
 export class AddComponent implements OnInit {
 
-  value = 'Clear me';
-  type = ''
+  value = 'Press enter to add';
+  type = 'yt'
 
   constructor(private videoService: VideoService) { }
 
   ngOnInit(): void {
   }
 
+  changeVideoType(event: any){
+    this.type = event.value;
+  }
+
   addVideo(){
     let newId: string;
-    if (this.type = 'yt'){
-      newId = this.value.length >= 11?this.value.substr(this.value.length - 11) : this.value;
+    
+
+    if (this.type === 'yt' && this.value.length >= 11){
+      
+      newId = this.value.substr(this.value.length - 11);
+    } else if(this.value.length >= 9){
+      newId = this.value.substr(this.value.length - 9);
     } else{
-      newId = this.value.length >= 9?this.value.substr(this.value.length - 9) : this.value;
+      return
     }
 
     this.videoService.checkIfVideoExists(newId, this.type);

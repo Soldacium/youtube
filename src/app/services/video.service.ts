@@ -7,13 +7,14 @@ import { Video } from '../models/video.model';
 })
 export class VideoService {
 
-  constructor() { }
+  constructor() {
+    this.getVideosFromLocalStorage();
+   }
 
   // $client = new Vimeo("{client_id}", "{client_secret}", "{access_token}");
 
   keys = {
-    settings: 'sett',
-    videos: 'aa'
+    videos: 'videos'
 
   };
 
@@ -30,7 +31,7 @@ export class VideoService {
 
   };
 
-  updateSearchOptions(typeOfVideos: string, sortOrder: string, videoDisplay: string){
+  updateSearchOptions(typeOfVideos: string, sortOrder: string, videoDisplay: string): void{
     if (sortOrder !== this.searchOptions.sort){
       this.sortVideosByDate(sortOrder);
     }
@@ -46,14 +47,11 @@ export class VideoService {
   }
 
 
-  getVideoInfo(id: string){
 
 
-    return;
-  }
-
-  getAllVideos(){
-    this.videos = JSON.parse(localStorage.getItem(this.keys.videos) || '{}');
+  getVideosFromLocalStorage(){
+    this.videos = JSON.parse(localStorage.getItem(this.keys.videos) || '[]');
+    console.log(this.videos)
   }
 
   sortVideosByDate(order: string){
@@ -66,16 +64,34 @@ export class VideoService {
 
   getVideosFromPage(page: number, itemsPerPage: number){
 
-    const min = (page - 1) * itemsPerPage;
+    const videosGotten = [];
+    const min = (page) * itemsPerPage;
 
     for (let i = min; i < min + itemsPerPage; i++){
       if (this.videos[i]){
-        this.getVideoInfo(this.videos[i].id);
+        this.getVideoInfo(this.videos[i].id, this.videos[i].type);
+        videosGotten.push(this.videos[i]);
       }
     }
 
-    return [];
+    return videosGotten;
   }
+
+  getVideoInfo(id: string, type: string): void{
+
+    return;
+  }
+
+  getYoutubeVideo(id: string){
+
+  }
+
+  getVimeoVideo(id: string){
+
+  }
+
+
+  
 
   checkIfVideoExists(id: string, type: string){
 
@@ -86,11 +102,12 @@ export class VideoService {
       id,
       type,
       favourite: false,
-      modifyDate: new Date()
+      modifyDate: Date.now()
     };
 
     this.videos.push(video);
     this.updateLocalStorage();
+    console.log(this.videos, video);
   }
 
   deleteVideo(id: string){
@@ -98,7 +115,12 @@ export class VideoService {
     this.updateLocalStorage();
   }
 
-  makeVideoFavourite(){
+  clearLocalStorage(){
+    this.videos = [];
+    localStorage.setItem(this.keys.videos, JSON.stringify([]));
+  }
+
+  makeVideoFavourite(id: string){
 
   }
 

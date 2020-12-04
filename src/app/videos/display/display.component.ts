@@ -10,19 +10,20 @@ export class DisplayComponent implements OnInit {
 
   constructor(private videoService: VideoService) { }
 
-  videos = [
-    1,2,3,4,5,6
-  ]
+  videos: Array<object> = [];
+  videosLength = 0;
 
   itemsPerPage = 6;
-  page = 1;
+  page = 0;
 
   ngOnInit(): void {
+    this.videosLength = this.videoService.videos.length;
     this.videos = this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 
-  changePage(){
-    this.videos = this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
+  changePage(event: any){
+    console.log(event)
+    this.videos = this.videoService.getVideosFromPage(event.pageIndex, event.pageSize);
 
   }
 

@@ -5,12 +5,26 @@
     align-items: center;
     justify-content: center;
     margin: 2rem 0;
+    margin-bottom: 4rem;
+
+    .mat-button-toggle{
+        color: black;
+        padding: 0.3rem 1rem;
+    }
+
+    .mat-button-toggle-checked.yt{
+        background-color: pink;
+    }
+
+    .mat-button-toggle-checked.vimeo{
+        background-color: rgb(192, 248, 255);
+    }
 
     mat-form-field{
         width: 300px;
     }
 
     .toggle{
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     }
 }

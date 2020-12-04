@@ -1,7 +1,7 @@
 <div class="container">
     <div class="youtube" *ngFor='let video of videos'>
         <div class="image">
-
+            <img src="https://www.tubics.com/wp-content/uploads/2018/10/how-to-create-youtube-thumbnails-1.png" alt="">
         </div>
         <div class="desc">
             <div>Video {{video}}</div>
@@ -9,12 +9,21 @@
             <div>Video {{video}}</div>
         </div>
         <div class="options">
-
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <mat-icon>plus_one</mat-icon>
+            </button>
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <mat-icon>plus_one</mat-icon>
+            </button>
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <mat-icon>plus_one</mat-icon>
+            </button>
         </div>
     </div>
 
-    <mat-paginator [length]="100"
-              [pageSize]="6"
-              [pageSizeOptions]="[5, 10, 25, 100]">
+    <mat-paginator [length]="this.videosLength"
+              [pageSize]="itemsPerPage"
+              [pageSizeOptions]="[6, 12, 18, 24]"
+              (page)='changePage($event)'>
     </mat-paginator>
 </div>
