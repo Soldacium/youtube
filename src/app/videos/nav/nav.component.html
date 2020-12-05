@@ -20,34 +20,34 @@
     -->
 
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
-        <mat-button-toggle value="left" aria-label="Text align left" checked='true'>
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.videos" (change)='updateOptions()'>
+        <mat-button-toggle value="all" aria-label="Text align left" checked='true'>
             All
         </mat-button-toggle>
-        <mat-button-toggle value="center" aria-label="Text align center">
+        <mat-button-toggle value="fav" aria-label="Text align center">
             Favourite
         </mat-button-toggle>   
-        <mat-button-toggle value="left" aria-label="Text align left">
+        <mat-button-toggle value="yt" aria-label="Text align left">
             Youtube
         </mat-button-toggle>
-        <mat-button-toggle value="center" aria-label="Text align center">
+        <mat-button-toggle value="vimeo" aria-label="Text align center">
             Vimeo
         </mat-button-toggle>
     </mat-button-toggle-group>
     
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
-        <mat-button-toggle value="left" aria-label="Text align left" checked='true'>
-            <mat-icon>play_arrow</mat-icon>
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.sort" (change)='updateOptions()'>
+        <mat-button-toggle value="descending" aria-label="Text align left" checked='true'>
+            <mat-icon>keyboard_arrow_down</mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle value="center" aria-label="Text align center">
-            <mat-icon>view_module</mat-icon>
+        <mat-button-toggle value="ascending" aria-label="Text align center">
+            <mat-icon>keyboard_arrow_up</mat-icon>
         </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle'>
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.display" (change)='updateOptions()'>
         <mat-button-toggle value="left" aria-label="Text align left" checked='true'>
-            <mat-icon>play_arrow</mat-icon>
+            <mat-icon>format_list_bulleted</mat-icon>
         </mat-button-toggle>
         <mat-button-toggle value="center" aria-label="Text align center">
             <mat-icon>view_module</mat-icon>

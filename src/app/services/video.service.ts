@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Video } from '../models/video.model';
 
 
@@ -9,18 +9,24 @@ export class VideoService {
 
   constructor() {
     this.getVideosFromLocalStorage();
+    //this.getOptionsFromLocalStorage();
    }
 
-  // $client = new Vimeo("{client_id}", "{client_secret}", "{access_token}");
-
+  localStorage = localStorage;
   keys = {
-    videos: 'videos'
-
+    videos: 'videos',
+    options: 'options'
   };
 
-  localStorage = localStorage;
+  lastPage = 0;
+  lastItemsPerPage = 0;
+
+
+
   videos: Video[] = [];
-  searchedVideos = [];
+  videosMeetingSearchCriteria: Video[] = [];
+  searchedVideos: Video[] = [];
+  searchedVideosChange = new EventEmitter<Video[]>();
 
 
 
@@ -31,9 +37,14 @@ export class VideoService {
 
   };
 
+
+
+
+
+
   updateSearchOptions(typeOfVideos: string, sortOrder: string, videoDisplay: string): void{
     if (sortOrder !== this.searchOptions.sort){
-      this.sortVideosByDate(sortOrder);
+      this.sortVideosByDate();
     }
 
     this.searchOptions = {
@@ -43,37 +54,61 @@ export class VideoService {
 
     };
 
-
+    this.updateVideosMeetingSearchCriteria();
   }
 
+  updateVideosMeetingSearchCriteria(): void{
+    let videos: Video[] = [];
 
-
-
-  getVideosFromLocalStorage(){
-    this.videos = JSON.parse(localStorage.getItem(this.keys.videos) || '[]');
-    console.log(this.videos)
-  }
-
-  sortVideosByDate(order: string){
-    if (order === 'descending'){
-
-    }else{
-
+    switch (this.searchOptions.videos) {
+      case 'all':
+        videos = this.videos;
+        break;
+      case 'fav':
+        videos = this.videos.filter(video => video.favourite === true)
+        break;
+      case 'yt':
+        videos = this.videos.filter(video => video.type === 'yt')
+        break;
+      case 'vimeo':
+        videos = this.videos.filter(video => video.type === 'vimeo')
+        break;
+      default:
+        break;
     }
+
+    this.videosMeetingSearchCriteria = videos;
+    this.getVideosFromPage(this.lastPage,this.lastItemsPerPage);
   }
 
-  getVideosFromPage(page: number, itemsPerPage: number){
+  // that's enough for now as all videos are already sorted by date;
+  sortVideosByDate(){
+    this.videos.reverse();
+    this.updateVideosMeetingSearchCriteria();
+  }
+
+
+
+
+
+
+  getVideosFromPage(page: number, itemsPerPage: number): Video[]{
+
+    this.lastItemsPerPage = itemsPerPage;
+    this.lastPage = page;
 
     const videosGotten = [];
     const min = (page) * itemsPerPage;
 
     for (let i = min; i < min + itemsPerPage; i++){
-      if (this.videos[i]){
-        this.getVideoInfo(this.videos[i].id, this.videos[i].type);
-        videosGotten.push(this.videos[i]);
+      if (this.videosMeetingSearchCriteria[i]){
+        this.getVideoInfo(this.videosMeetingSearchCriteria[i].id, this.videosMeetingSearchCriteria[i].type);
+        videosGotten.push(this.videosMeetingSearchCriteria[i]);
       }
     }
 
+    this.searchedVideos = videosGotten;
+    this.searchedVideosChange.emit(this.searchedVideos)
     return videosGotten;
   }
 
@@ -91,13 +126,16 @@ export class VideoService {
   }
 
 
-  
+
+
+
 
   checkIfVideoExists(id: string, type: string){
 
   }
 
-  addVideo(id: string, type: string){
+  addVideo(id: string, type: string): void{
+
     const video: Video = {
       id,
       type,
@@ -106,27 +144,84 @@ export class VideoService {
     };
 
     this.videos.push(video);
-    this.updateLocalStorage();
-    console.log(this.videos, video);
-  }
-
-  deleteVideo(id: string){
-    this.videos.filter(video => video.id !== id);
+    this.getVideosFromPage(this.lastPage,this.lastItemsPerPage);
     this.updateLocalStorage();
   }
 
-  clearLocalStorage(){
+  deleteVideo(id: string): void{
+    const video = this.videos.find(video => video.id === id);
+    if(video){
+      this.videos.splice(this.videos.indexOf(video),1);
+      this.searchedVideos.splice(this.searchedVideos.indexOf(video),1)
+      this.updateLocalStorage();
+    }
+
+  }
+
+
+
+
+
+
+
+  setVideoAsFavourite(id: string): void{
+    const video = this.videos.find(video => video.id === id);
+    if(video){
+      video.favourite = true;
+    }
+
+    if(this.searchOptions.videos === 'fav'){
+      this.getVideosFromPage(this.lastPage,this.lastItemsPerPage)
+    }
+
+    this.updateLocalStorage();
+  }
+
+  setVideoAsNotFavourite(id: string): void {
+    const video = this.videos.find(video => video.id === id);
+
+    if(video){
+      video.favourite = false;
+    }
+
+    
+
+    if(this.searchOptions.videos === 'fav'){
+      this.updateVideosMeetingSearchCriteria();
+      this.getVideosFromPage(this.lastPage,this.lastItemsPerPage)
+    }
+
+    this.updateLocalStorage();
+    
+  }
+
+
+
+
+
+
+
+  clearLocalStorage(): void{
     this.videos = [];
     localStorage.setItem(this.keys.videos, JSON.stringify([]));
   }
 
-  makeVideoFavourite(id: string){
-
+  private getItemFromLocalStorage(key: string){
+    return JSON.parse(localStorage.getItem(key) || '[]');
   }
 
-
-  private updateLocalStorage(){
+  private updateLocalStorage(): void{
     const videos = JSON.stringify(this.videos);
     localStorage.setItem(this.keys.videos, videos);
+  }
+
+  private getVideosFromLocalStorage(): void{
+    this.videos = JSON.parse(localStorage.getItem(this.keys.videos) || '[]');
+    console.log(this.videos)
+  }
+
+  private getOptionsFromLocalStorage(): void{
+    this.searchOptions = JSON.parse(localStorage.getItem(this.keys.options) || "{}");
+    console.log(this.searchOptions)
   }
 }

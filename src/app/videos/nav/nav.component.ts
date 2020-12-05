@@ -19,26 +19,24 @@ export class NavComponent implements OnInit {
   ];
 
   searchOptions = {
-
+    videos: '',
+    sort: '',
+    display: ''
   }
-
-
 
   ngOnInit(): void {
     this.searchOptions = this.videoService.searchOptions;
+    this.videoService.updateSearchOptions(this.searchOptions.videos,this.searchOptions.sort,this.searchOptions.display);
   }
 
   setDisplayMode(mode: string){
-    if (this.mode !== mode){
-      this.mode === mode;
-    }else{
-      this.mode === 'all';
-    }
+    this.mode = this.mode === mode? 'all' : mode;
 
   }
 
   updateOptions(){
-    //this.videoService.updateSearchOptions()
+    this.videoService.updateSearchOptions(this.searchOptions.videos,this.searchOptions.sort,this.searchOptions.display);
+    console.log(this.searchOptions)
   }
 
 

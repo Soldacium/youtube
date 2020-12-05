@@ -22,6 +22,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 import { FormsModule } from '@angular/forms';
 import { WatchComponent } from './videos/watch/watch.component';
+import { PopupComponent } from './videos/popup/popup.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { WatchComponent } from './videos/watch/watch.component';
     OptionsComponent,
     NavComponent,
     DisplayComponent,
-    WatchComponent
+    WatchComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,

@@ -1,22 +1,25 @@
 <div class="container">
     <div class="youtube" *ngFor='let video of videos'>
-        <div class="image">
+        <div class="thumbnail">
             <img src="https://www.tubics.com/wp-content/uploads/2018/10/how-to-create-youtube-thumbnails-1.png" alt="">
+            <div class="thumbnail-play">
+                <mat-icon>play_circle_outline</mat-icon>
+            </div>
         </div>
         <div class="desc">
-            <div>Video {{video}}</div>
-            <div>Video {{video}}</div>
-            <div>Video {{video}}</div>
+            <div>Video {{video.id}}</div>
+            <div>Video </div>
+            <div>Video </div>
         </div>
         <div class="options">
-            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-                <mat-icon>plus_one</mat-icon>
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='deleteVideo(video.id)'>
+                <mat-icon>cancel</mat-icon>
             </button>
-            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-                <mat-icon>plus_one</mat-icon>
+            <button *ngIf='!video.favourite' mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='favourVideo(video.id)'>
+                <mat-icon>favorite_border</mat-icon>
             </button>
-            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-                <mat-icon>plus_one</mat-icon>
+            <button *ngIf='video.favourite' mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='unfavourVideo(video.id)'>
+                <mat-icon>favorite</mat-icon>
             </button>
         </div>
     </div>
