@@ -13,10 +13,12 @@ export class VideoService {
 
   constructor(private http: HttpClient) {
     this.getVideosFromLocalStorage();
+    this.getLocalStorageSpaceAvailable();
     // this.getOptionsFromLocalStorage();
    }
 
   localStorage = localStorage;
+  localStorageSpaceTaken = '';
   keys = {
     videos: 'videos',
     options: 'options'
@@ -259,6 +261,20 @@ export class VideoService {
     this.savedVideos = [];
     localStorage.setItem(this.keys.videos, JSON.stringify([]));
     this.getVideosFromPage(0, this.lastItemsPerPage);
+  }
+
+  private getLocalStorageSpaceAvailable(){
+    let space = 0;
+    this.savedVideos.forEach(video => {
+      for (const [key, value] of Object.entries(video)) {
+        if(value){
+          space += value.toString().length
+        }
+      }
+    })
+    this.localStorageSpaceTaken = (space/ 5100000).toFixed(5);
+    console.log(this.localStorageSpaceTaken)
+
   }
 
   private getItemFromLocalStorage(key: string){

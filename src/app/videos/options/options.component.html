@@ -1,11 +1,24 @@
 
 <div class="container">
-    <mat-slide-toggle class="toggle">Slide me!</mat-slide-toggle>
-    <mat-slide-toggle class="toggle">Slide me!</mat-slide-toggle>
-    <mat-slide-toggle class="toggle">Slide me!</mat-slide-toggle>
-    <button mat-stroked-button color="warn" (click)='clearAllVideos()'>Clear all videos</button>
-
-    <div class="progress-bar">
-
+    <div class="section-title">
+        <h3>General</h3>
+        <button mat-stroked-button color="accent" (click)='clearAllVideos()'>Reset</button>
     </div>
+
+    <mat-slide-toggle class="toggle">Slide me!</mat-slide-toggle>
+    <mat-slide-toggle class="toggle">Slide me!</mat-slide-toggle>
+    <mat-slide-toggle class="toggle">Slide me!</mat-slide-toggle>
+
+    <div class="section-title">
+        <h3>Storage space available</h3>
+        <button mat-stroked-button color="accent" (click)='clearAllVideos()'>Clear all videos</button>
+    </div>
+    <div class="progress-bar">
+        <span class="progress" [style.width]="(localStorageSpaceTaken + 1) + '%'"></span>
+
+        <div class='percentage'>{{localStorageSpaceTaken}} %</div>
+        
+    </div>
+    
+
 </div>

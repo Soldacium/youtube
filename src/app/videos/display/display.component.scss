@@ -15,17 +15,24 @@
 }
 
 .youtube{
-    border: 1px solid rgb(201, 201, 201);
+    
     flex: 1 1 30rem;
     max-width: 33%;
     height: 30vh;
     margin: 1rem 1.5rem;
     background-color: white;
-    transition: 0.3s box-shadow ease;
+    transition: 0.3s ease;
     position: relative;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.123);
+    bottom: 0;
 
     &:hover{
-        box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.123);
+        bottom: 5px;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.12), 
+        0 2px 2px rgba(0,0,0,0.12), 
+        0 4px 4px rgba(0,0,0,0.12), 
+        0 8px 8px rgba(0,0,0,0.12),
+        0 16px 16px rgba(0,0,0,0.12);
         cursor: pointer;
 
     }
@@ -45,7 +52,7 @@
         overflow: hidden;
 
         img{
-            max-width: 100%;
+            width: 100%;
             min-height: 100%;
         }
 
@@ -60,7 +67,7 @@
             justify-content: center;
             align-items: center;
             transition: 0.3s;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.63);
 
             &:hover{
                 opacity: 1;
@@ -105,7 +112,7 @@
 
     .desc{
         position: absolute;
-        bottom: -2rem;
+        bottom: -2.5rem;
         padding: 1rem;
         display: flex;
         justify-content: space-around;
@@ -116,11 +123,14 @@
         transition: 0.3s ease;
 
         &.yt{
-            background-color: rgb(255, 129, 167);
+            background: rgb(255,157,203);
+            background: linear-gradient(90deg, rgb(255, 185, 217) 0%, rgb(255, 165, 190) 35%, rgba(255,122,189,1) 100%);
+            
         }
 
         &.vimeo{
-            background-color: rgb(129, 236, 255);
+            background: rgb(216,250,255);
+            background: linear-gradient(90deg, rgb(193, 247, 255) 0%, rgba(151,249,255,1) 35%, rgba(122,233,255,1) 100%);
         }
 
 
