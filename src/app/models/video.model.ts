@@ -3,4 +3,7 @@ export class Video{
     favourite!: boolean;
     type!: string;
     modifyDate!: number;
+    thumbnail!: string;
+    title!: string;
+    views!: string;
 }

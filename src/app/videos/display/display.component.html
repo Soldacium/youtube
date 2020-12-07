@@ -1,16 +1,5 @@
 <div class="container">
     <div class="youtube" *ngFor='let video of videos'>
-        <div class="thumbnail">
-            <img src="https://www.tubics.com/wp-content/uploads/2018/10/how-to-create-youtube-thumbnails-1.png" alt="">
-            <div class="thumbnail-play">
-                <mat-icon>play_circle_outline</mat-icon>
-            </div>
-        </div>
-        <div class="desc">
-            <div>Video {{video.id}}</div>
-            <div>Video </div>
-            <div>Video </div>
-        </div>
         <div class="options">
             <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='deleteVideo(video.id)'>
                 <mat-icon>cancel</mat-icon>
@@ -22,11 +11,37 @@
                 <mat-icon>favorite</mat-icon>
             </button>
         </div>
-    </div>
+        <div class="overflow-wrap">
+            <div class="thumbnail">
+                <img [src]="video.thumbnail" alt="">
+                <div class="thumbnail-play" (click)='playVideo(video)'>
+                    <mat-icon>play_circle_outline</mat-icon>
+                </div>
+            </div>
+            <div class="desc" [ngClass]='video.type ==="yt"?"yt":"vimeo"'>
+                <div>{{video.title}}</div>
+                <div>{{video.views}} </div>
+            </div>            
+        </div>
+
+
+    </div>        
+    
+
 
     <mat-paginator [length]="this.videosLength"
               [pageSize]="itemsPerPage"
               [pageSizeOptions]="[6, 12, 18, 24]"
               (page)='changePage($event)'>
-    </mat-paginator>
+    </mat-paginator>        
+    
+
+</div>
+
+<div class="player" *ngIf='openPlayer' (click)='closeVideo($event)'>
+    <div class="video">
+        <iframe [src]='videoPlayingUrl' frameborder="0">
+
+        </iframe>
+    </div>
 </div>

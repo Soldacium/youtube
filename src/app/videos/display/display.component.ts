@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Video } from 'src/app/models/video.model';
 import { VideoService } from 'src/app/services/video.service';
+
+import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-display',
@@ -9,33 +12,38 @@ import { VideoService } from 'src/app/services/video.service';
 })
 export class DisplayComponent implements OnInit {
 
-  constructor(private videoService: VideoService) { }
+  constructor(private videoService: VideoService, private sanitizer: DomSanitizer) { }
 
   videos: Video[] = [];
   videosLength = 0;
+
+  videoPlayingUrl!: SafeResourceUrl;
+  openPlayer = false;
 
   itemsPerPage = 6;
   page = 0;
 
   ngOnInit(): void {
     
-    this.videoService.searchedVideosChange.subscribe((videos: Video[]) => {
+    this.videoService.searchedVideosChange.subscribe((videos: any[]) => {
+
+
       this.videos = videos;
+      console.log(videos)
+
     });
 
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
 
-
-
-    this.videosLength = this.videoService.videos.length;
-    console.log(this.videos, this.videoService.searchedVideos)
+    this.videosLength = this.videoService.savedVideos.length;
 
   }
 
   changePage(event: any){
     console.log(event)
+    console.log(this.videos)
     this.videoService.getVideosFromPage(event.pageIndex, event.pageSize);
-    this.videosLength = this.videoService.videos.length;
+    this.videosLength = this.videoService.savedVideos.length;
 
   }
 
@@ -49,6 +57,24 @@ export class DisplayComponent implements OnInit {
 
   unfavourVideo(videoID: string){
     this.videoService.setVideoAsNotFavourite(videoID);
+  }
+
+  playVideo(video: Video){
+    this.openPlayer = true;
+    if(video.type === 'yt'){
+      
+      this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.id}`)
+      console.log(this.videoPlayingUrl)
+    }else{
+
+    }
+    
+  }
+
+  closeVideo(event: Event){
+    event.stopPropagation();
+    this.openPlayer = false;
+    this.videoPlayingUrl = '';
   }
 
 
