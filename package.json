@@ -1,6 +1,11 @@
 {
   "name": "youtube",
-  "version": "0.0.0",
+  "email": "wojciechwawrzynwil@gmail.com",
+  "url": "https://github.com/Soldacium/youtube/issues",
+  "version": "1.0.0",
+  "description": "app to save your favourite youtube or vimeo videos for later, pick favourites,sort and watch however you want",
+  "keywords": ["Angular", "Typescript", "Sass", "Api","Node.js"],
+  "license": "BSD-3-Clause",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
