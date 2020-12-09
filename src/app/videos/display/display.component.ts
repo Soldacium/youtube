@@ -15,7 +15,6 @@ export class DisplayComponent implements OnInit {
   constructor(private videoService: VideoService, private sanitizer: DomSanitizer) { }
 
   videos: Video[] = [];
-  videosLength = 0;
 
   videoPlayingUrl!: SafeResourceUrl;
   openPlayer = false;
@@ -23,55 +22,45 @@ export class DisplayComponent implements OnInit {
   itemsPerPage = 6;
   page = 0;
 
+  displayType = '';
+  totalVideos = this.videoService.savedVideos;
+
   ngOnInit(): void {
-    
     this.videoService.searchedVideosChange.subscribe((videos: any[]) => {
-
-
       this.videos = videos;
-      console.log(videos)
-
     });
 
+    this.displayType = this.videoService.searchOptions.display;
+
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
-
-    this.videosLength = this.videoService.savedVideos.length;
-
   }
 
-  changePage(event: any){
-    console.log(event)
-    console.log(this.videos)
+  changePage(event: any): void{
     this.videoService.getVideosFromPage(event.pageIndex, event.pageSize);
-    this.videosLength = this.videoService.savedVideos.length;
-
   }
 
-  deleteVideo(videoID: string){
+  deleteVideo(videoID: string): void{
     this.videoService.deleteVideo(videoID);
   }
 
-  favourVideo(videoID: string){
+  favourVideo(videoID: string): void{
     this.videoService.setVideoAsFavourite(videoID);
   }
 
-  unfavourVideo(videoID: string){
+  unfavourVideo(videoID: string): void{
     this.videoService.setVideoAsNotFavourite(videoID);
   }
 
-  playVideo(video: Video){
+  playVideo(video: Video): void{
     this.openPlayer = true;
-    if(video.type === 'yt'){
-      
-      this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.id}`)
-      console.log(this.videoPlayingUrl)
+    if (video.type === 'yt'){
+      this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.id}`);
     }else{
-
+      this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${video.id}?`);
     }
-    
   }
 
-  closeVideo(event: Event){
+  closeVideo(event: Event): void{
     event.stopPropagation();
     this.openPlayer = false;
     this.videoPlayingUrl = '';

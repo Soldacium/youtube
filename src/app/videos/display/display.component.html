@@ -1,13 +1,15 @@
 <div class="container">
-    <div class="youtube" *ngFor='let video of videos'>
+    
+    <div class="video-block"   *ngFor='let video of videos'>
+        <!-- [ngClass]="displayType === 'blocks'?'video-block':'video-list'" -->
         <div class="options">
-            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='deleteVideo(video.id)'>
+            <button mat-mini-fab color="accent" aria-label="Delete video" (click)='deleteVideo(video.id)'>
                 <mat-icon>cancel</mat-icon>
             </button>
-            <button *ngIf='!video.favourite' mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='favourVideo(video.id)'>
+            <button *ngIf='!video.favourite' mat-mini-fab color="accent" aria-label="Make video a favourite" (click)='favourVideo(video.id)'>
                 <mat-icon>favorite_border</mat-icon>
             </button>
-            <button *ngIf='video.favourite' mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" (click)='unfavourVideo(video.id)'>
+            <button *ngIf='video.favourite' mat-mini-fab color="accent" aria-label="Unfavour the video" (click)='unfavourVideo(video.id)'>
                 <mat-icon>favorite</mat-icon>
             </button>
         </div>
@@ -18,9 +20,9 @@
                     <mat-icon>play_circle_outline</mat-icon>
                 </div>
             </div>
-            <div class="desc" [ngClass]='video.type ==="yt"?"yt":"vimeo"'>
-                <div>{{video.title}}</div>
-                <div>{{video.views}} </div>
+            <div class="info" [ngClass]='video.type ==="yt"?"yt":"vimeo"'>
+                <div class='info-title'>{{video.title}}</div>
+                <div class='info-views' *ngIf='video.views'>{{video.views}} <mat-icon>remove_red_eye</mat-icon></div>
             </div>            
         </div>
 
@@ -29,7 +31,7 @@
     
 
 
-    <mat-paginator [length]="this.videosLength"
+    <mat-paginator [length]="totalVideos.length"
               [pageSize]="itemsPerPage"
               [pageSizeOptions]="[6, 12, 18, 24]"
               (page)='changePage($event)'>
@@ -41,7 +43,12 @@
 <div class="player" *ngIf='openPlayer' (click)='closeVideo($event)'>
     <div class="video">
         <iframe [src]='videoPlayingUrl' frameborder="0">
+            
 
+            
         </iframe>
+        <button class="close" mat-mini-fab color="accent" aria-label="Close Video" (click)='closeVideo($event)'>
+            <mat-icon>cancel</mat-icon>
+        </button>
     </div>
 </div>

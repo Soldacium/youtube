@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Video } from '../models/video.model';
 import { map } from 'rxjs/operators';
-import { LoadedVideos } from '../models/loadedVideo.model';
 import { Observable } from 'rxjs';
 
 
@@ -65,6 +64,8 @@ export class VideoService {
     this.updateVideosMeetingSearchCriteria();
   }
 
+
+
   updateVideosMeetingSearchCriteria(): void{
     let videos: Video[] = [];
 
@@ -90,7 +91,7 @@ export class VideoService {
   }
 
   // that's enough for now as all videos are already sorted by date;
-  sortVideosByDate(){
+  sortVideosByDate(): void{
     this.savedVideos.reverse();
     this.updateVideosMeetingSearchCriteria();
   }
@@ -110,31 +111,22 @@ export class VideoService {
 
     for (let i = min; i < min + itemsPerPage; i++){
       const video = this.videosMeetingSearchCriteria[i];
-
       if (video){
         videosGotten.push(video);
       }
     }
 
     this.searchedVideos = videosGotten;
-
     this.searchedVideosChange.emit(this.searchedVideos);
+
     return videosGotten;
-  }
-
-  getVideoInfo(id: string, type: string){
-
-    return type === 'yt' ? this.getYoutubeVideoData(id) : this.getVimeoVideoData(id);
   }
 
   getVimeoVideoData(id: string): Observable<any>{
     return this.http.get('http://localhost:3000/api/vimeo/' + id).pipe(
       map((res: any) => {
-
         if (res.data.app){
-
           const videoData = res.data;
-
           return {
             title: videoData.name,
             description: videoData.descpription,
@@ -143,26 +135,20 @@ export class VideoService {
           };
         }
         return;
-
       })
     );
-
   }
 
   getYoutubeVideoData(id: string): Observable<any>{
-
     return this.http.get('http://localhost:3000/api/youtube/' + id).pipe(
       map((res: any) => {
         if (res.video.data.items[0]){
           const videoData = res.video.data.items[0].snippet;
-          // console.log(res.video.data.items[0])
-
           return {
             title: videoData.title,
             description: videoData.descpription,
             thumbnail: videoData.thumbnails.maxres.url,
             views: res.video.data.items[0].statistics.viewCount
-
           };
         }
         return;
@@ -176,16 +162,11 @@ export class VideoService {
 
 
 
-  checkIfVideoExists(id: string, type: string){
-
-  }
-
   addVideo(id: string, type: string): void{
 
-    const videoData =  type === 'yt' ? this.getYoutubeVideoData(id) : this.getVimeoVideoData(id);
-    videoData.subscribe((videoData: any) => {
+    const videoDataObservable =  type === 'yt' ? this.getYoutubeVideoData(id) : this.getVimeoVideoData(id);
+    videoDataObservable.subscribe((videoData: any) => {
       if (videoData){
-        // console.log(videoData)
         const video: Video = {
           id,
           type,
@@ -208,7 +189,7 @@ export class VideoService {
   }
 
   deleteVideo(id: string): void{
-    const video = this.savedVideos.find(video => video.id === id);
+    const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
       this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
       this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
@@ -223,12 +204,13 @@ export class VideoService {
 
 
   setVideoAsFavourite(id: string): void{
-    const video = this.savedVideos.find(video => video.id === id);
+    const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
       video.favourite = true;
     }
 
     if (this.searchOptions.videos === 'fav'){
+      this.updateVideosMeetingSearchCriteria();
       this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
     }
 
@@ -236,7 +218,7 @@ export class VideoService {
   }
 
   setVideoAsNotFavourite(id: string): void {
-    const video = this.savedVideos.find(video => video.id === id);
+    const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
 
     if (video){
       video.favourite = false;
@@ -248,7 +230,6 @@ export class VideoService {
     }
 
     this.updateLocalStorage();
-
   }
 
 
@@ -263,21 +244,22 @@ export class VideoService {
     this.getVideosFromPage(0, this.lastItemsPerPage);
   }
 
-  private getLocalStorageSpaceAvailable(){
+  private getLocalStorageSpaceAvailable(): string{
     let space = 0;
     this.savedVideos.forEach(video => {
       for (const [key, value] of Object.entries(video)) {
-        if(value){
-          space += value.toString().length
+        if (value){
+          space += value.toString().length;
         }
       }
-    })
-    this.localStorageSpaceTaken = (space/ 5100000).toFixed(5);
-    console.log(this.localStorageSpaceTaken)
+    });
 
+    this.localStorageSpaceTaken = (space / 5100000).toFixed(5);
+
+    return (space / 5100000).toFixed(5);
   }
 
-  private getItemFromLocalStorage(key: string){
+  private getItemFromLocalStorage(key: string): JSON{
     return JSON.parse(localStorage.getItem(key) || '[]');
   }
 

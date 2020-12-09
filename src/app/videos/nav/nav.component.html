@@ -46,10 +46,10 @@
     </mat-button-toggle-group>
 
     <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.display" (change)='updateOptions()'>
-        <mat-button-toggle value="left" aria-label="Text align left" checked='true'>
+        <mat-button-toggle value="list" aria-label="Text align left" >
             <mat-icon>format_list_bulleted</mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle value="center" aria-label="Text align center">
+        <mat-button-toggle value="block" aria-label="Text align center" checked='true'>
             <mat-icon>view_module</mat-icon>
         </mat-button-toggle>
     </mat-button-toggle-group>

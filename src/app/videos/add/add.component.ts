@@ -17,30 +17,26 @@ export class AddComponent implements OnInit {
   ngOnInit(): void {
 
     this.videoService.errorEmitter.subscribe((error: string) => {
-      console.log(error)
       this.error = error;
-    })
+    });
   }
 
-  changeVideoType(event: any){
+  changeVideoType(event: any): void{
     this.type = event.value;
   }
 
-  addVideo(){
+  addVideo(): void{
     let newId: string;
-    
+
 
     if (this.type === 'yt' && this.value.length >= 11){
-      
       newId = this.value.substr(this.value.length - 11);
-    } else if(this.type === 'vimeo' && this.value.length >= 9){
+    } else if (this.type === 'vimeo' && this.value.length >= 9){
       newId = this.value.substr(this.value.length - 9);
     } else{
-      this.error = 'Must be minimum 9 characters for Vimeo and 11 for YT'
-      return
+      this.error = 'Must be minimum 9 characters for Vimeo and 11 for YT';
+      return;
     }
-
-    this.videoService.checkIfVideoExists(newId, this.type);
 
     this.videoService.addVideo(newId, this.type);
   }
