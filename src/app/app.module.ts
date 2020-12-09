@@ -21,9 +21,10 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 import { FormsModule } from '@angular/forms';
-import { WatchComponent } from './videos/watch/watch.component';
-import { PopupComponent } from './videos/popup/popup.component';
+
 import { HttpClientModule } from '@angular/common/http';
+import { VideosLayoutComponent } from './videos/display/videos-layout/videos-layout.component';
+import { PlayComponent } from './videos/display/play/play.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     OptionsComponent,
     NavComponent,
     DisplayComponent,
-    WatchComponent,
-    PopupComponent
+    VideosLayoutComponent,
+    PlayComponent
   ],
   imports: [
     BrowserModule,

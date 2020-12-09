@@ -34,6 +34,7 @@ export class VideoService {
   videosMeetingSearchCriteria: Video[] = [];
   searchedVideos: any[] = [];
   searchedVideosChange = new EventEmitter<any[]>();
+  optionsChange = new EventEmitter<object>()
 
   errorEmitter = new EventEmitter<string>();
 
@@ -58,8 +59,8 @@ export class VideoService {
       videos: typeOfVideos,
       sort: sortOrder,
       display: videoDisplay
-
     };
+    this.optionsChange.emit(this.searchOptions)
 
     this.updateVideosMeetingSearchCriteria();
   }
@@ -93,7 +94,6 @@ export class VideoService {
   // that's enough for now as all videos are already sorted by date;
   sortVideosByDate(): void{
     this.savedVideos.reverse();
-    this.updateVideosMeetingSearchCriteria();
   }
 
 
@@ -117,6 +117,7 @@ export class VideoService {
     }
 
     this.searchedVideos = videosGotten;
+    
     this.searchedVideosChange.emit(this.searchedVideos);
 
     return videosGotten;
@@ -174,7 +175,7 @@ export class VideoService {
           title: videoData.title,
           thumbnail: videoData.thumbnail,
           views: videoData.views,
-          modifyDate: Date.now()
+          modifyDate: new Date().toLocaleDateString('en-GB')
         };
 
         this.savedVideos.push(video);
@@ -239,9 +240,12 @@ export class VideoService {
 
 
   clearLocalStorage(): void{
+    this.searchedVideos = []
     this.savedVideos = [];
+    this.videosMeetingSearchCriteria = [];
     localStorage.setItem(this.keys.videos, JSON.stringify([]));
     this.getVideosFromPage(0, this.lastItemsPerPage);
+    this.getLocalStorageSpaceAvailable();
   }
 
   private getLocalStorageSpaceAvailable(): string{
@@ -257,10 +261,6 @@ export class VideoService {
     this.localStorageSpaceTaken = (space / 5100000).toFixed(5);
 
     return (space / 5100000).toFixed(5);
-  }
-
-  private getItemFromLocalStorage(key: string): JSON{
-    return JSON.parse(localStorage.getItem(key) || '[]');
   }
 
   private updateLocalStorage(): void{

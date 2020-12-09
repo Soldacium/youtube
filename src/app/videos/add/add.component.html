@@ -1,4 +1,5 @@
 <div class="container">
+
     <mat-button-toggle-group  #group="matButtonToggleGroup" appearance="legacy" class='toggle' (change)="changeVideoType($event)">
         <mat-button-toggle color='primary' value="yt" aria-label="Text align left" checked='true' class='yt'>
             Youtube
@@ -7,6 +8,7 @@
             Vimeo
         </mat-button-toggle>
     </mat-button-toggle-group>
+
     <mat-form-field class="example-form-field">
         <mat-label>Video ID or link</mat-label>
         <input matInput type="text" [(ngModel)]="value" (keyup.enter)='addVideo()'>
@@ -14,10 +16,9 @@
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field> 
+    
     <div *ngIf='error.length > 0'>
         {{ error }}
     </div>
-
-
 
 </div>

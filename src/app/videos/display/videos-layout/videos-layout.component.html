@@ -1,0 +1,34 @@
+
+<div class="videos">
+    <div [ngClass]="displayType === 'list'?'video-list':'video-block'"   *ngFor='let video of videos'>
+
+        <div class="options">
+            <button mat-mini-fab color="accent" aria-label="Delete video" (click)='deleteVideo(video)'>
+                <mat-icon>cancel</mat-icon>
+            </button>
+            <button *ngIf='!video.favourite' mat-mini-fab color="accent" aria-label="Make video a favourite" (click)='favourVideo(video)'>
+                <mat-icon>favorite_border</mat-icon>
+            </button>
+            <button *ngIf='video.favourite' mat-mini-fab color="accent" aria-label="Unfavour the video" (click)='unfavourVideo(video)'>
+                <mat-icon>favorite</mat-icon>
+            </button>
+            <div class="date">
+                <mat-icon>access_time</mat-icon> {{video.modifyDate}}
+            </div>
+        </div>
+
+        <div class="overflow-wrap">
+            <div class="thumbnail">
+                <img [src]="video.thumbnail" alt="">
+                <div class="thumbnail-play" (click)='playVideo(video)'>
+                    <mat-icon>play_circle_outline</mat-icon>
+                </div>
+            </div>
+            <div class="info" [ngClass]='video.type ==="yt"?"yt":"vimeo"'>
+                <div class='info-title'>{{video.title}}</div>
+                <div class='info-views' *ngIf='video.views'>{{video.views}} <mat-icon>remove_red_eye</mat-icon></div>
+            </div>            
+        </div>
+    
+    </div>
+</div>

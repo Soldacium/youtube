@@ -12,7 +12,11 @@ import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platf
 })
 export class DisplayComponent implements OnInit {
 
-  constructor(private videoService: VideoService, private sanitizer: DomSanitizer) { }
+
+  
+  constructor(
+    private videoService: VideoService, 
+    private sanitizer: DomSanitizer) { }
 
   videos: Video[] = [];
 
@@ -25,30 +29,42 @@ export class DisplayComponent implements OnInit {
   displayType = '';
   totalVideos = this.videoService.savedVideos;
 
+
+
+
   ngOnInit(): void {
     this.videoService.searchedVideosChange.subscribe((videos: any[]) => {
       this.videos = videos;
     });
+
+    this.videoService.optionsChange.subscribe((options: any) => {
+      this.displayType = options.display;
+      console.log(this.displayType)
+    })
 
     this.displayType = this.videoService.searchOptions.display;
 
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 
+
+
+
+
   changePage(event: any): void{
     this.videoService.getVideosFromPage(event.pageIndex, event.pageSize);
   }
 
-  deleteVideo(videoID: string): void{
-    this.videoService.deleteVideo(videoID);
+  deleteVideo(video: Video): void{
+    this.videoService.deleteVideo(video.id);
   }
 
-  favourVideo(videoID: string): void{
-    this.videoService.setVideoAsFavourite(videoID);
+  favourVideo(video: Video): void{
+    this.videoService.setVideoAsFavourite(video.id);
   }
 
-  unfavourVideo(videoID: string): void{
-    this.videoService.setVideoAsNotFavourite(videoID);
+  unfavourVideo(video: Video): void{
+    this.videoService.setVideoAsNotFavourite(video.id);
   }
 
   playVideo(video: Video): void{
@@ -60,8 +76,7 @@ export class DisplayComponent implements OnInit {
     }
   }
 
-  closeVideo(event: Event): void{
-    event.stopPropagation();
+  closeVideo(close: boolean): void{
     this.openPlayer = false;
     this.videoPlayingUrl = '';
   }
