@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Video } from 'src/app/models/video.model';
 import { VideoService } from 'src/app/services/video.service';
 
@@ -13,9 +12,9 @@ import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platf
 export class DisplayComponent implements OnInit {
 
 
-  
+
   constructor(
-    private videoService: VideoService, 
+    private videoService: VideoService,
     private sanitizer: DomSanitizer) { }
 
   videos: Video[] = [];
@@ -39,11 +38,9 @@ export class DisplayComponent implements OnInit {
 
     this.videoService.optionsChange.subscribe((options: any) => {
       this.displayType = options.display;
-      console.log(this.displayType)
-    })
+    });
 
     this.displayType = this.videoService.searchOptions.display;
-
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 

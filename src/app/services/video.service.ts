@@ -34,7 +34,7 @@ export class VideoService {
   videosMeetingSearchCriteria: Video[] = [];
   searchedVideos: any[] = [];
   searchedVideosChange = new EventEmitter<any[]>();
-  optionsChange = new EventEmitter<object>()
+  optionsChange = new EventEmitter<object>();
 
   errorEmitter = new EventEmitter<string>();
 
@@ -60,7 +60,7 @@ export class VideoService {
       sort: sortOrder,
       display: videoDisplay
     };
-    this.optionsChange.emit(this.searchOptions)
+    this.optionsChange.emit(this.searchOptions);
 
     this.updateVideosMeetingSearchCriteria();
   }
@@ -117,10 +117,44 @@ export class VideoService {
     }
 
     this.searchedVideos = videosGotten;
-    
+
     this.searchedVideosChange.emit(this.searchedVideos);
 
     return videosGotten;
+  }
+
+
+
+
+
+
+
+
+
+  addVideo(id: string, type: string): void{
+
+    const videoDataObservable =  type === 'yt' ? this.getYoutubeVideoData(id) : this.getVimeoVideoData(id);
+    videoDataObservable.subscribe((videoData: any) => {
+      if (videoData){
+        const video: Video = {
+          id,
+          type,
+          favourite: false,
+          title: videoData.title,
+          thumbnail: videoData.thumbnail,
+          views: videoData.views,
+          modifyDate: new Date().toLocaleDateString('en-GB')
+        };
+
+        this.savedVideos.push(video);
+        this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
+        this.updateLocalStorage();
+
+        this.errorEmitter.emit('');
+      }else {
+        this.errorEmitter.emit('Video not found');
+      }
+    });
   }
 
   getVimeoVideoData(id: string): Observable<any>{
@@ -159,36 +193,6 @@ export class VideoService {
 
 
 
-
-
-
-
-  addVideo(id: string, type: string): void{
-
-    const videoDataObservable =  type === 'yt' ? this.getYoutubeVideoData(id) : this.getVimeoVideoData(id);
-    videoDataObservable.subscribe((videoData: any) => {
-      if (videoData){
-        const video: Video = {
-          id,
-          type,
-          favourite: false,
-          title: videoData.title,
-          thumbnail: videoData.thumbnail,
-          views: videoData.views,
-          modifyDate: new Date().toLocaleDateString('en-GB')
-        };
-
-        this.savedVideos.push(video);
-        this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
-        this.updateLocalStorage();
-
-        this.errorEmitter.emit('');
-      }else {
-        this.errorEmitter.emit('Video not found');
-      }
-    });
-  }
-
   deleteVideo(id: string): void{
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
@@ -197,10 +201,6 @@ export class VideoService {
       this.updateLocalStorage();
     }
   }
-
-
-
-
 
 
 
@@ -239,8 +239,12 @@ export class VideoService {
 
 
 
+
+
+
+
   clearLocalStorage(): void{
-    this.searchedVideos = []
+    this.searchedVideos = [];
     this.savedVideos = [];
     this.videosMeetingSearchCriteria = [];
     localStorage.setItem(this.keys.videos, JSON.stringify([]));

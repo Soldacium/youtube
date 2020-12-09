@@ -8,39 +8,39 @@ import { Video } from 'src/app/models/video.model';
 })
 export class VideosLayoutComponent {
 
-  @Input() 
+  @Input()
   videos!: Video[];
 
   @Input()
-  displayType: String = '';
+  displayType: string = '';
 
-  @Output('delete')
-  deleteEmitter = new EventEmitter<Video>();
+  @Output() delete:
+  EventEmitter<any> = new EventEmitter<Video>();
 
-  @Output('favour')
-  favourEmitter = new EventEmitter<Video>();
+  @Output() favour:
+  EventEmitter<any> = new EventEmitter<Video>();
 
-  @Output('unfavour')
-  unfavourEmitter = new EventEmitter<Video>();
+  @Output() unfavour:
+  EventEmitter<any> = new EventEmitter<Video>();
 
-  @Output('play')
-  playEmitter = new EventEmitter<Video>();
+  @Output() play:
+  EventEmitter<any> = new EventEmitter<Video>();
 
 
-  deleteVideo(video: Video){
-    this.deleteEmitter.emit(video);
+  deleteVideo(video: Video): void{
+    this.delete.emit(video);
   }
 
-  favourVideo(video: Video){
-    this.favourEmitter.emit(video);
+  favourVideo(video: Video): void{
+    this.favour.emit(video);
   }
 
-  unfavourVideo(video: Video){
-    this.unfavourEmitter.emit(video);
+  unfavourVideo(video: Video): void{
+    this.unfavour.emit(video);
   }
 
-  playVideo(video: Video){
-    this.playEmitter.emit(video);
+  playVideo(video: Video): void{
+    this.play.emit(video);
   }
 
 }

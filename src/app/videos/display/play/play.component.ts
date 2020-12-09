@@ -12,12 +12,12 @@ export class PlayComponent {
   @Input()
   videoUrl!: SafeUrl;
 
-  @Output('close')
-  closeEmitter = new EventEmitter<boolean>();
+  @Output() close:
+  EventEmitter<any> = new EventEmitter<boolean>();
 
 
   closeVideo(event: Event): void{
     event.stopPropagation();
-    this.closeEmitter.emit(true);
+    this.close.emit(true);
   }
 }

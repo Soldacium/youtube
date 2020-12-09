@@ -14,7 +14,6 @@ export class OptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.localStorageSpaceTaken = this.videoService.localStorageSpaceTaken;
-    console.log(this.localStorageSpaceTaken);
   }
 
   clearAllVideos(): void{

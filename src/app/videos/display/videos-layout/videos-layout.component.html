@@ -1,6 +1,6 @@
 
 <div class="videos">
-    <div [ngClass]="displayType === 'list'?'video-list':'video-block'"   *ngFor='let video of videos'>
+    <div [ngClass]="displayType === 'list'?'video-list':'video-block'" class="video"   *ngFor='let video of videos'>
 
         <div class="options">
             <button mat-mini-fab color="accent" aria-label="Delete video" (click)='deleteVideo(video)'>
