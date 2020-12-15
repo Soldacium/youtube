@@ -10,7 +10,7 @@ router.get('/:id',(req,res,next) => {
     google.youtube('v3').videos.list({
         id: req.params.id,
         part: 'snippet,contentDetails,statistics',
-        key: 'apiKey'
+        key: 'AIzaSyD5WPqAoDw7eCVmtLY0_EfCQ0OpHiRKyF4'
     }).then(video => {
         
         res.status(200).json({

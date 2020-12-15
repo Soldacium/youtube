@@ -4,20 +4,20 @@ import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-play',
-  templateUrl: './play.component.html',
-  styleUrls: ['./play.component.scss']
+  templateUrl: './video-player.component.html',
+  styleUrls: ['./video-player.component.scss']
 })
-export class PlayComponent {
+export class VideoPlayerComponent {
 
   @Input()
   videoUrl!: SafeUrl;
 
-  @Output() close:
+  @Output() closeVid:
   EventEmitter<any> = new EventEmitter<boolean>();
 
 
   closeVideo(event: Event): void{
     event.stopPropagation();
-    this.close.emit(true);
+    this.closeVid.emit(true);
   }
 }

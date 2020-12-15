@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Video } from 'src/app/models/video.model';
+import { Video } from '@models/video.model';
 
 @Component({
   selector: 'app-videos-layout',
@@ -12,7 +12,7 @@ export class VideosLayoutComponent {
   videos!: Video[];
 
   @Input()
-  displayType: string = '';
+  displayType = '';
 
   @Output() delete:
   EventEmitter<any> = new EventEmitter<Video>();
@@ -23,7 +23,7 @@ export class VideosLayoutComponent {
   @Output() unfavour:
   EventEmitter<any> = new EventEmitter<Video>();
 
-  @Output() play:
+  @Output() playVid:
   EventEmitter<any> = new EventEmitter<Video>();
 
 
@@ -40,7 +40,7 @@ export class VideosLayoutComponent {
   }
 
   playVideo(video: Video): void{
-    this.play.emit(video);
+    this.playVid.emit(video);
   }
 
 }

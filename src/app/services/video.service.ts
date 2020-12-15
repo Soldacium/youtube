@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { Video } from '../models/video.model';
+import { Video } from '@models/video.model';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -10,15 +10,15 @@ import { Observable } from 'rxjs';
 })
 export class VideoService {
 
+
   constructor(private http: HttpClient) {
     this.getVideosFromLocalStorage();
-    this.getLocalStorageSpaceAvailable();
-    // this.getOptionsFromLocalStorage();
+    this.getLocalStorageSpaceTaken();
    }
 
   localStorage = localStorage;
   localStorageSpaceTaken = '';
-  keys = {
+  private storageKeys = {
     videos: 'videos',
     options: 'options'
   };
@@ -38,6 +38,8 @@ export class VideoService {
 
   errorEmitter = new EventEmitter<string>();
 
+  storageSpaceEmitter = new EventEmitter<string>();
+
 
 
   searchOptions = {
@@ -46,6 +48,15 @@ export class VideoService {
     display: 'blocks'
 
   };
+
+  private videoSearchTypes = {
+    all: 'all',
+    youtube: 'yt',
+    vimeo: 'vimeo',
+    favourite: 'fav'
+  };
+
+
 
 
 
@@ -68,30 +79,29 @@ export class VideoService {
 
 
   updateVideosMeetingSearchCriteria(): void{
-    let videos: Video[] = [];
-
-    switch (this.searchOptions.videos) {
-      case 'all':
-        videos = this.savedVideos;
-        break;
-      case 'fav':
-        videos = this.savedVideos.filter(video => video.favourite === true);
-        break;
-      case 'yt':
-        videos = this.savedVideos.filter(video => video.type === 'yt');
-        break;
-      case 'vimeo':
-        videos = this.savedVideos.filter(video => video.type === 'vimeo');
-        break;
-      default:
-        break;
-    }
-
-    this.videosMeetingSearchCriteria = videos;
+    this.videosMeetingSearchCriteria = this.getVideosBySearchOption(this.searchOptions.videos);
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
 
-  // that's enough for now as all videos are already sorted by date;
+  private getVideosBySearchOption(allowedVideosType: string): Array<Video>{
+    switch (allowedVideosType) {
+      case 'all':
+        return this.savedVideos;
+      case 'fav':
+        return this.savedVideos.filter(video => video.favourite === true);
+      case 'yt':
+        return this.savedVideos.filter(video => video.type === 'yt');
+      case 'vimeo':
+        return this.savedVideos.filter(video => video.type === 'vimeo');
+      default:
+        return [];
+    }
+  }
+
+  getVideosMeetingSearchCriteriaLength(): number{
+    return this.videosMeetingSearchCriteria.length;
+  }
+
   sortVideosByDate(): void{
     this.savedVideos.reverse();
   }
@@ -107,9 +117,9 @@ export class VideoService {
     this.lastPage = page;
 
     const videosGotten = [];
-    const min = (page) * itemsPerPage;
+    const minimumItems = (page) * itemsPerPage;
 
-    for (let i = min; i < min + itemsPerPage; i++){
+    for (let i = minimumItems; i < minimumItems + itemsPerPage; i++){
       const video = this.videosMeetingSearchCriteria[i];
       if (video){
         videosGotten.push(video);
@@ -179,10 +189,11 @@ export class VideoService {
       map((res: any) => {
         if (res.video.data.items[0]){
           const videoData = res.video.data.items[0].snippet;
+          console.log(res.video.data.items[0]);
           return {
             title: videoData.title,
             description: videoData.descpription,
-            thumbnail: videoData.thumbnails.maxres.url,
+            thumbnail: videoData.thumbnails.maxres ? videoData.thumbnails.maxres.url : videoData.thumbnails.high.url,
             views: res.video.data.items[0].statistics.viewCount
           };
         }
@@ -198,6 +209,7 @@ export class VideoService {
     if (video){
       this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
       this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
+      this.updateVideosMeetingSearchCriteria();
       this.updateLocalStorage();
     }
   }
@@ -246,37 +258,35 @@ export class VideoService {
   clearLocalStorage(): void{
     this.searchedVideos = [];
     this.savedVideos = [];
-    this.videosMeetingSearchCriteria = [];
-    localStorage.setItem(this.keys.videos, JSON.stringify([]));
-    this.getVideosFromPage(0, this.lastItemsPerPage);
-    this.getLocalStorageSpaceAvailable();
+    localStorage.setItem(this.storageKeys.videos, JSON.stringify([]));
+    this.updateVideosMeetingSearchCriteria();
+    this.getLocalStorageSpaceTaken();
   }
 
-  private getLocalStorageSpaceAvailable(): string{
-    let space = 0;
+  private getLocalStorageSpaceTaken(): string{
+    let spaceTaken = 0;
     this.savedVideos.forEach(video => {
       for (const [key, value] of Object.entries(video)) {
         if (value){
-          space += value.toString().length;
+          spaceTaken += value.toString().length;
         }
       }
     });
 
-    this.localStorageSpaceTaken = (space / 5100000).toFixed(5);
+    this.localStorageSpaceTaken = (spaceTaken / 5100000).toFixed(5);
+    this.storageSpaceEmitter.emit(this.localStorageSpaceTaken);
 
-    return (space / 5100000).toFixed(5);
+    return (spaceTaken / 5100000).toFixed(5);
   }
 
   private updateLocalStorage(): void{
     const videos = JSON.stringify(this.savedVideos);
-    localStorage.setItem(this.keys.videos, videos);
+    localStorage.setItem(this.storageKeys.videos, videos);
+    this.getLocalStorageSpaceTaken();
   }
 
   private getVideosFromLocalStorage(): void{
-    this.savedVideos = JSON.parse(localStorage.getItem(this.keys.videos) || '[]');
-  }
-
-  private getOptionsFromLocalStorage(): void{
-    this.searchOptions = JSON.parse(localStorage.getItem(this.keys.options) || '{}');
+    this.savedVideos = JSON.parse(localStorage.getItem(this.storageKeys.videos) || '[]');
+    this.getLocalStorageSpaceTaken();
   }
 }

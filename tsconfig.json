@@ -2,7 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "src",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -19,7 +19,13 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+        "@videos/*": ["app/videos/*"],
+        "@services/*": ["app/services/*"],
+        "@models/*": ["app/models/*"],
+        "@appRoot/*": ["app/*"]
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

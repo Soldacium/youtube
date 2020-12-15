@@ -6,11 +6,11 @@
     (delete)='deleteVideo($event)'
     (favour)='favourVideo($event)'
     (unfavour)='unfavourVideo($event)'
-    (play)='playVideo($event)'></app-videos-layout>
+    (playVid)='playVideo($event)'></app-videos-layout>
     
 
 
-    <mat-paginator [length]="totalVideos.length"
+    <mat-paginator [length]="searchedVideosLength"
               [pageSize]="itemsPerPage"
               [pageSizeOptions]="[6, 12, 18, 24]"
               (page)='changePage($event)'>
@@ -23,7 +23,7 @@
 
 <app-play
 *ngIf='openPlayer'
-(close)='closeVideo($event)'
+(closeVid)='closeVideo($event)'
 [videoUrl]='videoPlayingUrl'>
 
 </app-play>

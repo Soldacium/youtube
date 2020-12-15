@@ -1,30 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { VideosComponent } from './videos/videos.component';
-import { AddComponent } from './videos/add/add.component';
-import { OptionsComponent } from './videos/options/options.component';
-import { NavComponent } from './videos/nav/nav.component';
-import { DisplayComponent } from './videos/display/display.component';
-import { VideoService } from './services/video.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSelectModule} from '@angular/material/select';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-
 import { FormsModule } from '@angular/forms';
-
 import { HttpClientModule } from '@angular/common/http';
-import { VideosLayoutComponent } from './videos/display/videos-layout/videos-layout.component';
-import { PlayComponent } from './videos/display/play/play.component';
+
+import { AppRoutingModule } from '@appRoot/app-routing.module';
+import { AppComponent } from '@appRoot/app.component';
+import { VideosComponent } from '@videos/videos.component';
+import { AddComponent } from '@videos/add/add.component'; // ./videos
+import { OptionsComponent } from '@videos/options/options.component';
+import { NavComponent } from '@videos/nav/nav.component';
+import { DisplayComponent } from '@videos/display/display.component';
+import { VideoService } from '@services/video.service';
+import { VideosLayoutComponent } from '@videos/display/videos-layout/videos-layout.component';
+import { VideoPlayerComponent } from '@videos/display/video-player/video-player.component';
+
+
+import { MaterialModule } from '@appRoot/material.module';
+import { YoutubeService } from '@services/youtube.service';
+import { VimeoService } from '@services/vimeo.service';
+import { LocalStorageService } from '@services/local-storage.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +30,7 @@ import { PlayComponent } from './videos/display/play/play.component';
     NavComponent,
     DisplayComponent,
     VideosLayoutComponent,
-    PlayComponent
+    VideoPlayerComponent
   ],
   imports: [
     BrowserModule,
@@ -44,18 +39,10 @@ import { PlayComponent } from './videos/display/play/play.component';
     FormsModule,
     HttpClientModule,
 
-
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSlideToggleModule,
-    MatPaginatorModule,
-    MatButtonToggleModule
+    MaterialModule
 
   ],
-  providers: [VideoService],
+  providers: [VideoService, YoutubeService, VimeoService, LocalStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

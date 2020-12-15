@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Video } from 'src/app/models/video.model';
-import { VideoService } from 'src/app/services/video.service';
+import { Video } from '@models/video.model';
+import { VideoService } from '@services/video.service';
 
 import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
 
@@ -26,7 +26,7 @@ export class DisplayComponent implements OnInit {
   page = 0;
 
   displayType = '';
-  totalVideos = this.videoService.savedVideos;
+  searchedVideosLength = 0;
 
 
 
@@ -34,6 +34,7 @@ export class DisplayComponent implements OnInit {
   ngOnInit(): void {
     this.videoService.searchedVideosChange.subscribe((videos: any[]) => {
       this.videos = videos;
+      this.searchedVideosLength = this.videoService.getVideosMeetingSearchCriteriaLength();
     });
 
     this.videoService.optionsChange.subscribe((options: any) => {
