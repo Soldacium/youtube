@@ -1,5 +1,5 @@
 <div class="container">
- 
+    
     <app-videos-layout 
     [videos]='videos'
     [displayType]='displayType'
@@ -8,17 +8,13 @@
     (unfavour)='unfavourVideo($event)'
     (playVid)='playVideo($event)'></app-videos-layout>
     
-
-
     <mat-paginator [length]="searchedVideosLength"
               [pageSize]="itemsPerPage"
               [pageSizeOptions]="[6, 12, 18, 24]"
               (page)='changePage($event)'>
     </mat-paginator>        
     
-
 </div>
-
 
 
 <app-play

@@ -1,5 +1,5 @@
 import { EventEmitter, Input, Output } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Component({

@@ -1,7 +1,7 @@
 
 <nav>
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.videos" (change)='updateOptions()'>
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.videosAllowed" (change)='updateOptions()'>
         <mat-button-toggle value="all" aria-label="Text align left" checked='true'>
             All
         </mat-button-toggle>
@@ -25,7 +25,7 @@
         </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.display" (change)='updateOptions()'>
+    <mat-button-toggle-group #group="matButtonToggleGroup" appearance="standard" class='toggle' [(ngModel)]="searchOptions.displayType" (change)='updateOptions()'>
         <mat-button-toggle value="list" aria-label="Text align left" >
             <mat-icon>format_list_bulleted</mat-icon>
         </mat-button-toggle>

@@ -16,7 +16,25 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Connecting to backend
 
-Go to `backend/routes` and insert your api key for Youtube API v3 and clientID/client_secret/access_token for Vimeo API. Uses node.js and express.
+Go to `backend` folder, make new file named `keys.js` and insert following template:
+```
+let youtubeKeys = {
+    apiKey: "api_key",
+}
+
+let vimeoKeys = {
+    clientID: "client_id",
+    clientSecret: "client_secret",
+    accessToken: "access_token"
+}
+
+module.exports =  {youtubeKeys, vimeoKeys}
+```
+then provide your API keys in order to run the app.
+
+Alternatively, you can go straight to `backend/routes` and insert your api key for Youtube API v3 and clientID/client_secret/access_token for Vimeo API in place of `keys.*.*`. 
+
+Backend uses node.js and express.
 
 After providing those, run `npm run startServer` in console to access all app features.
 

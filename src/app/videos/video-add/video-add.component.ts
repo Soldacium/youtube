@@ -3,10 +3,10 @@ import { VideoService } from '@services/video.service';
 
 @Component({
   selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.scss']
+  templateUrl: './video-add.component.html',
+  styleUrls: ['./video-add.component.scss']
 })
-export class AddComponent implements OnInit {
+export class VideoAddComponent implements OnInit {
 
   value = 'Press enter to add';
   type = 'yt';

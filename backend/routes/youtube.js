@@ -1,4 +1,5 @@
 const express = require('express');
+const keys = require('../keys');
 
 const router = express.Router()
 
@@ -7,10 +8,11 @@ const {google} = require('googleapis');
 
 
 router.get('/:id',(req,res,next) => {
+    console.log(keys)
     google.youtube('v3').videos.list({
         id: req.params.id,
         part: 'snippet,contentDetails,statistics',
-        key: 'AIzaSyD5WPqAoDw7eCVmtLY0_EfCQ0OpHiRKyF4'
+        key: keys.youtubeKeys.apiKey
     }).then(video => {
         
         res.status(200).json({

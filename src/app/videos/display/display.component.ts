@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Video } from '@models/video.model';
 import { VideoService } from '@services/video.service';
 
-import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-display',
@@ -41,7 +41,7 @@ export class DisplayComponent implements OnInit {
       this.displayType = options.display;
     });
 
-    this.displayType = this.videoService.searchOptions.display;
+    this.displayType = this.videoService.searchOptions.displayType;
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 

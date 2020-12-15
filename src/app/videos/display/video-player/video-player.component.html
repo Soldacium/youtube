@@ -1,8 +1,6 @@
 <div class="player" (click)='closeVideo($event)' (keyup.esc)='closeVideo($event)'>
     <div class="video">
-        <iframe [src]='videoUrl' frameborder="0">
-            
-        </iframe>
+        <iframe [src]='videoUrl' frameborder="0"></iframe>
         <button class="close" mat-fab color="accent" aria-label="Close Video" (click)='closeVideo($event)'>
             <mat-icon>clear</mat-icon>
         </button>

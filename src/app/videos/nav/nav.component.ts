@@ -19,14 +19,14 @@ export class NavComponent implements OnInit {
   ];
 
   searchOptions = {
-    videos: '',
+    videosAllowed: '',
     sort: '',
-    display: ''
+    displayType: ''
   };
 
   ngOnInit(): void {
     this.searchOptions = this.videoService.searchOptions;
-    this.videoService.updateSearchOptions(this.searchOptions.videos, this.searchOptions.sort, this.searchOptions.display);
+    this.videoService.updateSearchOptions(this.searchOptions.videosAllowed, this.searchOptions.sort, this.searchOptions.displayType);
   }
 
   setDisplayMode(mode: string): void{
@@ -34,7 +34,7 @@ export class NavComponent implements OnInit {
   }
 
   updateOptions(): void{
-    this.videoService.updateSearchOptions(this.searchOptions.videos, this.searchOptions.sort, this.searchOptions.display);
+    this.videoService.updateSearchOptions(this.searchOptions.videosAllowed, this.searchOptions.sort, this.searchOptions.displayType);
   }
 
 

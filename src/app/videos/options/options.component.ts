@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { VideoService } from '@services/video.service';
+import { LocalStorageService } from '@services/local-storage.service';
+
 
 @Component({
   selector: 'app-options',
@@ -8,19 +9,19 @@ import { VideoService } from '@services/video.service';
 })
 export class OptionsComponent implements OnInit {
 
-  constructor(private videoService: VideoService) { }
+  constructor(private localStorageService: LocalStorageService) { }
 
   localStorageSpaceTaken = '';
 
   ngOnInit(): void {
-    this.localStorageSpaceTaken = this.videoService.localStorageSpaceTaken;
-    this.videoService.storageSpaceEmitter.subscribe((storageTaken: string) => {
+    this.localStorageSpaceTaken = this.localStorageService.localStorageSpaceTaken;
+    this.localStorageService.storageSpaceEmitter.subscribe((storageTaken: string) => {
       this.localStorageSpaceTaken = storageTaken;
     });
   }
 
   clearAllVideos(): void{
-    this.videoService.clearLocalStorage();
+    this.localStorageService.clearLocalStorage();
   }
 
 }

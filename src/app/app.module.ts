@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '@appRoot/app-routing.module';
 import { AppComponent } from '@appRoot/app.component';
 import { VideosComponent } from '@videos/videos.component';
-import { AddComponent } from '@videos/add/add.component'; // ./videos
+import { VideoAddComponent } from '@videos/video-add/video-add.component'; // ./videos
 import { OptionsComponent } from '@videos/options/options.component';
 import { NavComponent } from '@videos/nav/nav.component';
 import { DisplayComponent } from '@videos/display/display.component';
@@ -25,7 +25,7 @@ import { LocalStorageService } from '@services/local-storage.service';
   declarations: [
     AppComponent,
     VideosComponent,
-    AddComponent,
+    VideoAddComponent,
     OptionsComponent,
     NavComponent,
     DisplayComponent,
