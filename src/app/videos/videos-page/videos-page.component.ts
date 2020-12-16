@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Video } from '@models/video.model';
 
 @Component({
-  selector: 'app-videos-layout',
-  templateUrl: './videos-layout.component.html',
-  styleUrls: ['./videos-layout.component.scss']
+  selector: 'app-videos-page',
+  templateUrl: './videos-page.component.html',
+  styleUrls: ['./videos-page.component.scss']
 })
-export class VideosLayoutComponent {
+export class VideosPageComponent {
 
   @Input()
   videos!: Video[];
@@ -15,16 +15,16 @@ export class VideosLayoutComponent {
   displayType = '';
 
   @Output() delete:
-  EventEmitter<any> = new EventEmitter<Video>();
+  EventEmitter<Video> = new EventEmitter<Video>();
 
   @Output() favour:
-  EventEmitter<any> = new EventEmitter<Video>();
+  EventEmitter<Video> = new EventEmitter<Video>();
 
   @Output() unfavour:
-  EventEmitter<any> = new EventEmitter<Video>();
+  EventEmitter<Video> = new EventEmitter<Video>();
 
   @Output() playVid:
-  EventEmitter<any> = new EventEmitter<Video>();
+  EventEmitter<Video> = new EventEmitter<Video>();
 
 
   deleteVideo(video: Video): void{

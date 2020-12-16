@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Video } from '@models/video.model';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { YoutubeService } from './youtube.service';
@@ -16,7 +14,6 @@ export class VideoService {
 
 
   constructor(
-    private http: HttpClient,
     private storageService: LocalStorageService,
     private youtubeService: YoutubeService,
     private vimeoService: VimeoService) {
@@ -24,26 +21,16 @@ export class VideoService {
       this.storageService.getLocalStorageSpaceTaken();
     }
 
-  localStorageSpaceTaken = '';
-
   lastPage = 0;
   lastItemsPerPage = 0;
 
-
-
-
   savedVideos: Video[] = [];
-  loadedVideos = new Map([]);
   videosMeetingSearchCriteria: Video[] = [];
-  searchedVideos: any[] = [];
-  searchedVideosChange = new EventEmitter<any[]>();
-  optionsChange = new EventEmitter<object>();
+  searchedVideos: Video[] = [];
+  searchedVideosChange = new EventEmitter<Video[]>();
+
 
   errorEmitter = new EventEmitter<string>();
-
-  storageSpaceEmitter = new EventEmitter<string>();
-
-
 
   searchOptions = {
     videosAllowed: 'all',
@@ -51,6 +38,7 @@ export class VideoService {
     displayType: 'blocks'
 
   };
+  optionsChange = new EventEmitter<object>();
 
   private videoSearchTypes = {
     all: 'all',
@@ -58,10 +46,6 @@ export class VideoService {
     vimeo: 'vimeo',
     favourite: 'fav'
   };
-
-
-
-
 
 
   updateSearchOptions(typeOfVideos: string, sortOrder: string, videoDisplay: string): void{
@@ -83,14 +67,12 @@ export class VideoService {
     this.savedVideos.reverse();
   }
 
-
-
   updateVideosMeetingSearchCriteria(): void{
     this.videosMeetingSearchCriteria = this.getVideosBySearchOption(this.searchOptions.videosAllowed);
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
 
-  private getVideosBySearchOption(allowedVideosType: string): Array<Video>{
+  private getVideosBySearchOption(allowedVideosType: string): Video[]{
     switch (allowedVideosType) {
       case this.videoSearchTypes.all:
         return this.savedVideos;
@@ -114,7 +96,7 @@ export class VideoService {
 
 
 
-  getVideosFromPage(page: number, itemsPerPage: number): any[]{
+  getVideosFromPage(page: number, itemsPerPage: number): Video[]{
 
     this.lastItemsPerPage = itemsPerPage;
     this.lastPage = page;
@@ -205,9 +187,10 @@ export class VideoService {
     this.storageService.updateLocalStorage();
   }
 
-  clearLocalStorage(): void{
+  clearAllVideos(): void{
     this.searchedVideos = [];
     this.savedVideos = [];
+    this.storageService.savedVideos = this.savedVideos;
     this.updateVideosMeetingSearchCriteria();
     this.storageService.clearLocalStorage();
   }

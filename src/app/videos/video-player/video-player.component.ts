@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-play',
+  selector: 'app-video-play',
   templateUrl: './video-player.component.html',
   styleUrls: ['./video-player.component.scss']
 })

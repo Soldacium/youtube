@@ -3,15 +3,14 @@ import { Video } from '@models/video.model';
 import { VideoService } from '@services/video.service';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-display',
-  templateUrl: './display.component.html',
-  styleUrls: ['./display.component.scss']
+  selector: 'app-video-display',
+  templateUrl: './video-display.component.html',
+  styleUrls: ['./video-display.component.scss']
 })
-export class DisplayComponent implements OnInit {
-
-
+export class VideoDisplayComponent implements OnInit {
 
   constructor(
     private videoService: VideoService,
@@ -28,28 +27,29 @@ export class DisplayComponent implements OnInit {
   displayType = '';
   searchedVideosLength = 0;
 
-
-
-
   ngOnInit(): void {
+    this.getVideos();
+    this.getDisplayType();
+  }
+
+  getVideos(): void{
     this.videoService.searchedVideosChange.subscribe((videos: any[]) => {
       this.videos = videos;
       this.searchedVideosLength = this.videoService.getVideosMeetingSearchCriteriaLength();
     });
+    this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
+  }
 
+  getDisplayType(): void{
     this.videoService.optionsChange.subscribe((options: any) => {
       this.displayType = options.display;
     });
 
     this.displayType = this.videoService.searchOptions.displayType;
-    this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 
 
-
-
-
-  changePage(event: any): void{
+  changePage(event: PageEvent): void{
     this.videoService.getVideosFromPage(event.pageIndex, event.pageSize);
   }
 

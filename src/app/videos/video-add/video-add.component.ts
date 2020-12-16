@@ -1,44 +1,56 @@
 import { Component, OnInit } from '@angular/core';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { VideoService } from '@services/video.service';
 
 @Component({
-  selector: 'app-add',
+  selector: 'app-video-add',
   templateUrl: './video-add.component.html',
   styleUrls: ['./video-add.component.scss']
 })
 export class VideoAddComponent implements OnInit {
 
-  value = 'Press enter to add';
-  type = 'yt';
+  searchInput = '';
+  videoType = 'yt';
   error = '';
 
   constructor(private videoService: VideoService) { }
 
   ngOnInit(): void {
+    this.getErrorsSubscriber();
+  }
 
+  getErrorsSubscriber(): void{
     this.videoService.errorEmitter.subscribe((error: string) => {
       this.error = error;
     });
   }
 
-  changeVideoType(event: any): void{
-    this.type = event.value;
+  changeVideoType(event: MatButtonToggleChange): void{
+    this.videoType = event.value;
   }
 
   addVideo(): void{
+    const videoID = this.modifySearchInput();
+    if (videoID){
+      this.videoService.addVideo(videoID, this.videoType);
+    }
+  }
+
+  modifySearchInput(): string | undefined{
     let newId: string;
-
-
-    if (this.type === 'yt' && this.value.length >= 11){
-      newId = this.value.substr(this.value.length - 11);
-    } else if (this.type === 'vimeo' && this.value.length >= 9){
-      newId = this.value.substr(this.value.length - 9);
+    if (this.videoType === 'yt' && this.searchInput.length >= 11){
+      newId = this.searchInput.substr(this.searchInput.length - 11);
+    } else if (this.videoType === 'vimeo' && this.searchInput.length >= 9){
+      newId = this.searchInput.substr(this.searchInput.length - 9);
     } else{
       this.error = 'Must be minimum 9 characters for Vimeo and 11 for YT';
       return;
     }
+    return newId;
+  }
 
-    this.videoService.addVideo(newId, this.type);
+  clearSearchInput(): void{
+    this.searchInput = '';
   }
 
 }

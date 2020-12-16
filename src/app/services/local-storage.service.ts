@@ -20,10 +20,8 @@ export class LocalStorageService {
   constructor() { }
 
   addVideoToLocalStorage(video: Video): void{
-
     this.savedVideos.push(video);
     this.updateLocalStorage();
-
   }
 
   deleteVideoFromLocalStorage(id: string): void{
@@ -39,22 +37,18 @@ export class LocalStorageService {
     if (video){
       video.favourite = true;
     }
-
     this.updateLocalStorage();
   }
 
   setVideoAsNotFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-
     if (video){
       video.favourite = false;
     }
-
     this.updateLocalStorage();
   }
 
   clearLocalStorage(): void{
-
     localStorage.setItem(this.storageKeys.videos, JSON.stringify([]));
     this.getLocalStorageSpaceTaken();
   }

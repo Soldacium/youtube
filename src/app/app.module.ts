@@ -8,13 +8,12 @@ import { AppRoutingModule } from '@appRoot/app-routing.module';
 import { AppComponent } from '@appRoot/app.component';
 import { VideosComponent } from '@videos/videos.component';
 import { VideoAddComponent } from '@videos/video-add/video-add.component'; // ./videos
-import { OptionsComponent } from '@videos/options/options.component';
-import { NavComponent } from '@videos/nav/nav.component';
-import { DisplayComponent } from '@videos/display/display.component';
+import { VideoOptionsComponent } from '@videos/video-options/video-options.component';
+import { NavComponent } from '@videos/video-nav/video-nav.component';
+import { VideoDisplayComponent } from '@videos/video-display/video-display.component';
 import { VideoService } from '@services/video.service';
-import { VideosLayoutComponent } from '@videos/display/videos-layout/videos-layout.component';
-import { VideoPlayerComponent } from '@videos/display/video-player/video-player.component';
-
+import { VideosPageComponent } from '@videos/videos-page/videos-page.component';
+import { VideoPlayerComponent } from '@videos/video-player/video-player.component';
 
 import { MaterialModule } from '@appRoot/material.module';
 import { YoutubeService } from '@services/youtube.service';
@@ -26,10 +25,10 @@ import { LocalStorageService } from '@services/local-storage.service';
     AppComponent,
     VideosComponent,
     VideoAddComponent,
-    OptionsComponent,
+    VideoOptionsComponent,
     NavComponent,
-    DisplayComponent,
-    VideosLayoutComponent,
+    VideoDisplayComponent,
+    VideosPageComponent,
     VideoPlayerComponent
   ],
   imports: [
@@ -40,7 +39,6 @@ import { LocalStorageService } from '@services/local-storage.service';
     HttpClientModule,
 
     MaterialModule
-
   ],
   providers: [VideoService, YoutubeService, VimeoService, LocalStorageService],
   bootstrap: [AppComponent]

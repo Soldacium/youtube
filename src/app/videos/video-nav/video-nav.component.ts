@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { VideoService } from '@services/video.service';
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  selector: 'app-video-nav',
+  templateUrl: './video-nav.component.html',
+  styleUrls: ['./video-nav.component.scss']
 })
 export class NavComponent implements OnInit {
 

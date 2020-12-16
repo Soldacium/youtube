@@ -11,8 +11,8 @@
 
     <mat-form-field class="example-form-field">
         <mat-label>Video ID or link</mat-label>
-        <input matInput type="text" [(ngModel)]="value" (keyup.enter)='addVideo()'>
-        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <input matInput type="text" [(ngModel)]="searchInput" (keyup.enter)='addVideo()' placeholder="Press enter to add">
+        <button mat-button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchInput()">
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field> 
