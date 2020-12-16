@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { VideoTypes } from '@models/video-types.model';
 import { VideoService } from '@services/video.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { VideoService } from '@services/video.service';
 export class VideoAddComponent implements OnInit {
 
   searchInput = '';
-  videoType = 'yt';
+  videoType: VideoTypes = 'yt';
   error = '';
 
   constructor(private videoService: VideoService) { }

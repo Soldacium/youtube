@@ -8,7 +8,6 @@ const {google} = require('googleapis');
 
 
 router.get('/:id',(req,res,next) => {
-    console.log(keys)
     google.youtube('v3').videos.list({
         id: req.params.id,
         part: 'snippet,contentDetails,statistics',

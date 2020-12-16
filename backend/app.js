@@ -1,20 +1,14 @@
-//this is node js server app, but made easier with express
+
 const express = require('express')
-//const path = require('path')
 const bodyParser = require('body-parser');
-//mongoose for connecting to database
 const youtubeRoutes = require('./routes/youtube');
 const vimeoRoutes = require('./routes/vimeo');
 
-
-//import routes
 
 
 
 const app = express();
 
-
-//
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -44,5 +38,4 @@ app.use('/api/vimeo',vimeoRoutes);
 app.use('/api/youtube',youtubeRoutes);
 
 
-//export to server
 module.exports = app;

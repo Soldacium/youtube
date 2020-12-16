@@ -5,6 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 import { YoutubeService } from './youtube.service';
 import { VimeoService } from './vimeo.service';
 import { VideoApiData } from '@models/video-api-data.model';
+import { VideoTypes } from '@models/video-types.model';
 
 
 @Injectable({
@@ -117,7 +118,7 @@ export class VideoService {
   }
 
 
-  addVideo(id: string, type: string): void{
+  addVideo(id: string, type: VideoTypes): void{
 
     const videoDataObservable: Observable<VideoApiData | undefined> =
     type === 'yt' ? this.youtubeService.getYoutubeVideoData(id) : this.vimeoService.getVimeoVideoData(id);
@@ -137,7 +138,7 @@ export class VideoService {
     });
   }
 
-  private getVideoApiDataAsVideo(videoApiData: VideoApiData, id: string, type: string): Video{
+  private getVideoApiDataAsVideo(videoApiData: VideoApiData, id: string, type: VideoTypes): Video{
     const video: Video = {
       id,
       type,

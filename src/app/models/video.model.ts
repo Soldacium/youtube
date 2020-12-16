@@ -1,7 +1,9 @@
+import { VideoTypes } from '@models/video-types.model';
+
 export interface Video{
     id: string;
     favourite: boolean;
-    type: string;
+    type: VideoTypes;
     modifyDate: string;
     thumbnail: string;
     title: string;

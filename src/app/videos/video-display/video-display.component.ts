@@ -4,6 +4,7 @@ import { VideoService } from '@services/video.service';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PageEvent } from '@angular/material/paginator';
+import { VimeoService } from '@services/vimeo.service';
 
 @Component({
   selector: 'app-video-display',
@@ -26,6 +27,11 @@ export class VideoDisplayComponent implements OnInit {
   page = 0;
 
   displayType = '';
+
+  videoPlayers = {
+    yt: 'https://www.youtube.com/embed/',
+    vimeo: 'https://player.vimeo.com/video/'
+  };
 
   ngOnInit(): void {
     this.getVideos();
@@ -67,18 +73,12 @@ export class VideoDisplayComponent implements OnInit {
 
   playVideo(video: Video): void{
     this.openPlayer = true;
-    if (video.type === 'yt'){
-      this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.id}`);
-    }else{
-      this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${video.id}?`);
-    }
+    this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videoPlayers[video.type] + video.id);
   }
 
   closeVideo(close: boolean): void{
     this.openPlayer = false;
     this.videoPlayingUrl = '';
   }
-
-
 
 }
