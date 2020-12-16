@@ -22,10 +22,10 @@ export class VideoDisplayComponent implements OnInit {
   openPlayer = false;
 
   itemsPerPage = 6;
+  videosMeetingSearchCriteriaLength = 0;
   page = 0;
 
   displayType = '';
-  searchedVideosLength = 0;
 
   ngOnInit(): void {
     this.getVideos();
@@ -33,16 +33,16 @@ export class VideoDisplayComponent implements OnInit {
   }
 
   getVideos(): void{
-    this.videoService.searchedVideosChange.subscribe((videos: any[]) => {
+    this.videoService.searchedVideosChange.subscribe((videos: Video[]) => {
       this.videos = videos;
-      this.searchedVideosLength = this.videoService.getVideosMeetingSearchCriteriaLength();
+      this.videosMeetingSearchCriteriaLength = this.videoService.getVideosMeetingSearchCriteriaLength();
     });
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 
   getDisplayType(): void{
     this.videoService.optionsChange.subscribe((options: any) => {
-      this.displayType = options.display;
+      this.displayType = options.displayType;
     });
 
     this.displayType = this.videoService.searchOptions.displayType;

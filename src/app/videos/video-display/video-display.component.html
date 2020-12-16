@@ -8,7 +8,7 @@
     (unfavour)='unfavourVideo($event)'
     (playVid)='playVideo($event)'></app-videos-page>
     
-    <mat-paginator [length]="searchedVideosLength"
+    <mat-paginator [length]="videosMeetingSearchCriteriaLength"
               [pageSize]="itemsPerPage"
               [pageSizeOptions]="[6, 12, 18, 24]"
               (page)='changePage($event)'>
