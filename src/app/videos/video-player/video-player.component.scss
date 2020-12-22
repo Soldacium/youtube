@@ -9,7 +9,6 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.274);
 
-
     .video{
         position: relative;
         width: 100%;
@@ -24,14 +23,11 @@
             height: 100%;
         }
 
-
         .close{
             position: absolute;
             top: -3%;
             right: calc(10% - 4rem);
             z-index: 1000;
-
-
         }
 
     }

@@ -12,7 +12,6 @@ export class NavComponent implements OnInit {
 
   mode = '';
 
-
   sorts = [
     {value: 'descending', viewValue: 'Descending'},
     {value: 'ascending', viewValue: 'Ascending'},

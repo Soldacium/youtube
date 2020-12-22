@@ -30,7 +30,6 @@ export class VideoService {
   searchedVideos: Video[] = [];
   searchedVideosChange = new EventEmitter<Video[]>();
 
-
   errorEmitter = new EventEmitter<string>();
 
   searchOptions = {
