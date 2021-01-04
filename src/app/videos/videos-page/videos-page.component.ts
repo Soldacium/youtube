@@ -27,19 +27,19 @@ export class VideosPageComponent {
   EventEmitter<Video> = new EventEmitter<Video>();
 
 
-  deleteVideo(video: Video): void{
+  deleteVideo(video: Video): void {
     this.delete.emit(video);
   }
 
-  favourVideo(video: Video): void{
+  favourVideo(video: Video): void {
     this.favour.emit(video);
   }
 
-  unfavourVideo(video: Video): void{
+  unfavourVideo(video: Video): void {
     this.unfavour.emit(video);
   }
 
-  playVideo(video: Video): void{
+  playVideo(video: Video): void {
     this.playVid.emit(video);
   }
 

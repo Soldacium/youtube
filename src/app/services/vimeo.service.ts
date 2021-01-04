@@ -12,7 +12,7 @@ export class VimeoService {
 
   constructor(private http: HttpClient) { }
 
-  getVimeoVideoData(id: string): Observable<VideoApiData | undefined>{
+  getVimeoVideoData(id: string): Observable<VideoApiData | undefined> {
     return this.http.get<VimeoApiResponse>('http://localhost:3000/api/vimeo/' + id).pipe(
       map((res: VimeoApiResponse) => {
         if (res.uri){
@@ -23,12 +23,12 @@ export class VimeoService {
     );
   }
 
-  private getModifiedVimeoVideoData(videoData: VimeoApiResponse): VideoApiData{
+  private getModifiedVimeoVideoData(videoData: VimeoApiResponse): VideoApiData {
     const modifiedData = {
       title: videoData.name,
       description: videoData.description,
       thumbnail: videoData.pictures.sizes[videoData.pictures.sizes.length - 2].link,
-      views: videoData.stats.plays === null ? 0 : videoData.stats.plays
+      views: videoData.stats.plays === null ? null : videoData.stats.plays
     };
     return modifiedData;
   }

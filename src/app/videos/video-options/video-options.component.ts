@@ -20,14 +20,14 @@ export class VideoOptionsComponent implements OnInit {
     this.getLocalStorageSpaceTaken();
   }
 
-  getLocalStorageSpaceTaken(): void{
+  getLocalStorageSpaceTaken(): void {
     this.localStorageSpaceTaken = this.localStorageService.localStorageSpaceTaken;
     this.localStorageService.storageSpaceEmitter.subscribe((storageTaken: string) => {
       this.localStorageSpaceTaken = storageTaken;
     });
   }
 
-  clearAllVideos(): void{
+  clearAllVideos(): void {
     this.videoService.clearAllVideos();
   }
 

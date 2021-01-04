@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SearchOptions } from '@models/search-options.model';
 import { VideoService } from '@services/video.service';
 
 @Component({
@@ -17,10 +18,10 @@ export class NavComponent implements OnInit {
     {value: 'ascending', viewValue: 'Ascending'},
   ];
 
-  searchOptions = {
-    videosAllowed: '',
-    sort: '',
-    displayType: ''
+  searchOptions: SearchOptions = {
+    videosAllowed: 'all',
+    sort: 'ascending',
+    displayType: 'blocks'
   };
 
   ngOnInit(): void {
@@ -28,11 +29,11 @@ export class NavComponent implements OnInit {
     this.videoService.updateSearchOptions(this.searchOptions.videosAllowed, this.searchOptions.sort, this.searchOptions.displayType);
   }
 
-  setDisplayMode(mode: string): void{
+  setDisplayMode(mode: string): void {
     this.mode = this.mode === mode ? 'all' : mode;
   }
 
-  updateOptions(): void{
+  updateOptions(): void {
     this.videoService.updateSearchOptions(this.searchOptions.videosAllowed, this.searchOptions.sort, this.searchOptions.displayType);
   }
 

@@ -12,8 +12,7 @@ export class YoutubeService {
 
   constructor(private http: HttpClient) { }
 
-
-  getYoutubeVideoData(id: string): Observable<VideoApiData | undefined>{
+  getYoutubeVideoData(id: string): Observable<VideoApiData | undefined> {
     return this.http.get<YoutubeApiResponse>('http://localhost:3000/api/youtube/' + id).pipe(
       map((res: YoutubeApiResponse) => {
         if (res){
@@ -24,7 +23,7 @@ export class YoutubeService {
     );
   }
 
-  private getModifiedYoutubeVideoData(videoData: YoutubeApiResponse): VideoApiData{
+  private getModifiedYoutubeVideoData(videoData: YoutubeApiResponse): VideoApiData {
     const modifiedData = {
       title: videoData.snippet.title,
       description: videoData.snippet.description,

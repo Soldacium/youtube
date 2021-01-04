@@ -5,6 +5,7 @@ import { VideoService } from '@services/video.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PageEvent } from '@angular/material/paginator';
 import { VimeoService } from '@services/vimeo.service';
+import { SearchOptions } from '@models/search-options.model';
 
 @Component({
   selector: 'app-video-display',
@@ -33,12 +34,12 @@ export class VideoDisplayComponent implements OnInit {
     vimeo: 'https://player.vimeo.com/video/'
   };
 
-  ngOnInit(): void {
+  ngOnInit(): void  {
     this.getVideos();
     this.getDisplayType();
   }
 
-  getVideos(): void{
+  getVideos(): void  {
     this.videoService.searchedVideosChange.subscribe((videos: Video[]) => {
       this.videos = videos;
       this.videosMeetingSearchCriteriaLength = this.videoService.getVideosMeetingSearchCriteriaLength();
@@ -46,8 +47,8 @@ export class VideoDisplayComponent implements OnInit {
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
   }
 
-  getDisplayType(): void{
-    this.videoService.optionsChange.subscribe((options: any) => {
+  getDisplayType(): void  {
+    this.videoService.optionsChange.subscribe((options: SearchOptions) => {
       this.displayType = options.displayType;
     });
 
@@ -55,28 +56,28 @@ export class VideoDisplayComponent implements OnInit {
   }
 
 
-  changePage(event: PageEvent): void{
+  changePage(event: PageEvent): void  {
     this.videoService.getVideosFromPage(event.pageIndex, event.pageSize);
   }
 
-  deleteVideo(video: Video): void{
+  deleteVideo(video: Video): void  {
     this.videoService.deleteVideo(video.id);
   }
 
-  favourVideo(video: Video): void{
+  favourVideo(video: Video): void {
     this.videoService.setVideoAsFavourite(video.id);
   }
 
-  unfavourVideo(video: Video): void{
+  unfavourVideo(video: Video): void {
     this.videoService.setVideoAsNotFavourite(video.id);
   }
 
-  playVideo(video: Video): void{
+  playVideo(video: Video): void {
     this.openPlayer = true;
     this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videoPlayers[video.type] + video.id);
   }
 
-  closeVideo(close: boolean): void{
+  closeVideo(close: boolean): void {
     this.openPlayer = false;
     this.videoPlayingUrl = '';
   }

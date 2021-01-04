@@ -5,6 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 import { YoutubeService } from './youtube.service';
 import { VimeoService } from './vimeo.service';
 import { VideoApiData } from '@models/video-api-data.model';
+import { SearchOptions } from '@models/search-options.model';
 import { VideoTypes } from '@models/video-types.model';
 
 
@@ -12,7 +13,6 @@ import { VideoTypes } from '@models/video-types.model';
   providedIn: 'root'
 })
 export class VideoService {
-
 
   constructor(
     private storageService: LocalStorageService,
@@ -32,7 +32,7 @@ export class VideoService {
 
   errorEmitter = new EventEmitter<string>();
 
-  searchOptions = {
+  searchOptions: SearchOptions = {
     videosAllowed: 'all',
     sort: 'descending',
     displayType: 'blocks'
@@ -47,8 +47,7 @@ export class VideoService {
     favourite: 'fav'
   };
 
-
-  updateSearchOptions(typeOfVideos: string, sortOrder: string, videoDisplay: string): void{
+  updateSearchOptions(typeOfVideos: 'all' | 'vimeo' | 'yt' | 'favourite', sortOrder: 'descending' | 'ascending', videoDisplay: 'blocks' | 'list'): void {
     if (sortOrder !== this.searchOptions.sort){
       this.sortVideosByDate();
     }
@@ -59,15 +58,14 @@ export class VideoService {
       displayType: videoDisplay
     };
     this.optionsChange.emit(this.searchOptions);
-
     this.updateVideosMeetingSearchCriteria();
   }
 
-  sortVideosByDate(): void{
+  sortVideosByDate(): void {
     this.savedVideos.reverse();
   }
 
-  updateVideosMeetingSearchCriteria(): void{
+  updateVideosMeetingSearchCriteria(): void {
     this.videosMeetingSearchCriteria = this.getVideosBySearchOption(this.searchOptions.videosAllowed);
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
@@ -90,13 +88,13 @@ export class VideoService {
     }
   }
 
-  getVideosMeetingSearchCriteriaLength(): number{
+  getVideosMeetingSearchCriteriaLength(): number {
     return this.videosMeetingSearchCriteria.length;
   }
 
 
 
-  getVideosFromPage(page: number, itemsPerPage: number): Video[]{
+  getVideosFromPage(page: number, itemsPerPage: number): Video[] {
 
     this.lastItemsPerPage = itemsPerPage;
     this.lastPage = page;
@@ -117,7 +115,7 @@ export class VideoService {
   }
 
 
-  addVideo(id: string, type: VideoTypes): void{
+  addVideo(id: string, type: VideoTypes): void {
 
     const videoDataObservable: Observable<VideoApiData | undefined> =
     type === 'yt' ? this.youtubeService.getYoutubeVideoData(id) : this.vimeoService.getVimeoVideoData(id);
@@ -137,14 +135,14 @@ export class VideoService {
     });
   }
 
-  private getVideoApiDataAsVideo(videoApiData: VideoApiData, id: string, type: VideoTypes): Video{
+  private getVideoApiDataAsVideo(videoApiData: VideoApiData, id: string, type: VideoTypes): Video {
     const video: Video = {
       id,
       type,
       favourite: false,
       title: videoApiData.title,
       thumbnail: videoApiData.thumbnail,
-      views: videoApiData.views.toString(),
+      views: videoApiData.views ? videoApiData.views.toString() : '',
       modifyDate: new Date().toLocaleDateString('en-GB')
     };
 
@@ -153,7 +151,7 @@ export class VideoService {
 
 
 
-  deleteVideo(id: string): void{
+  deleteVideo(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
       this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
@@ -163,7 +161,7 @@ export class VideoService {
     }
   }
 
-  setVideoAsFavourite(id: string): void{
+  setVideoAsFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
       video.favourite = true;
@@ -187,7 +185,7 @@ export class VideoService {
     this.storageService.updateLocalStorage();
   }
 
-  clearAllVideos(): void{
+  clearAllVideos(): void {
     this.searchedVideos = [];
     this.savedVideos = [];
     this.storageService.savedVideos = this.savedVideos;

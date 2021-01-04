@@ -13,10 +13,10 @@ export class VideoPlayerComponent {
   videoUrl!: SafeUrl;
 
   @Output() closeVid:
-  EventEmitter<any> = new EventEmitter<boolean>();
+  EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
-  closeVideo(event: Event): void{
+  closeVideo(event: Event): void {
     event.stopPropagation();
     this.closeVid.emit(true);
   }

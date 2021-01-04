@@ -20,24 +20,24 @@ export class VideoAddComponent implements OnInit {
     this.getErrorsSubscriber();
   }
 
-  getErrorsSubscriber(): void{
+  getErrorsSubscriber(): void {
     this.videoService.errorEmitter.subscribe((error: string) => {
       this.error = error;
     });
   }
 
-  changeVideoType(event: MatButtonToggleChange): void{
+  changeVideoType(event: MatButtonToggleChange): void {
     this.videoType = event.value;
   }
 
-  addVideo(): void{
+  addVideo(): void {
     const videoID = this.modifySearchInput();
     if (videoID){
       this.videoService.addVideo(videoID, this.videoType);
     }
   }
 
-  modifySearchInput(): string | undefined{
+  modifySearchInput(): string | undefined {
     let newId: string;
     if (this.videoType === 'yt' && this.searchInput.length >= 11){
       newId = this.searchInput.substr(this.searchInput.length - 11);
@@ -50,7 +50,7 @@ export class VideoAddComponent implements OnInit {
     return newId;
   }
 
-  clearSearchInput(): void{
+  clearSearchInput(): void {
     this.searchInput = '';
   }
 

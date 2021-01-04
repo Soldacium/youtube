@@ -13,18 +13,17 @@ export class LocalStorageService {
     videos: 'videos',
     options: 'options'
   };
+  maxStorageSpaceInBytes = 5100000;
 
   savedVideos: Video[] = [];
   storageSpaceEmitter = new EventEmitter<string>();
 
-  constructor() { }
-
-  addVideoToLocalStorage(video: Video): void{
+  addVideoToLocalStorage(video: Video): void {
     this.savedVideos.push(video);
     this.updateLocalStorage();
   }
 
-  deleteVideoFromLocalStorage(id: string): void{
+  deleteVideoFromLocalStorage(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
       this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
@@ -32,7 +31,7 @@ export class LocalStorageService {
     }
   }
 
-  setVideoAsFavourite(id: string): void{
+  setVideoAsFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
     if (video){
       video.favourite = true;
@@ -48,28 +47,28 @@ export class LocalStorageService {
     this.updateLocalStorage();
   }
 
-  clearLocalStorage(): void{
+  clearLocalStorage(): void {
     localStorage.setItem(this.storageKeys.videos, JSON.stringify([]));
     this.getLocalStorageSpaceTaken();
   }
 
-  getLocalStorageSpaceTaken(): string{
-    let spaceTaken = 0;
+  getLocalStorageSpaceTaken(): string {
+    let spaceTakenInBytes = 0;
     this.savedVideos.forEach(video => {
       for (const [key, value] of Object.entries(video)) {
         if (value){
-          spaceTaken += value.toString().length;
+          spaceTakenInBytes += value.toString().length;
         }
       }
     });
 
-    this.localStorageSpaceTaken = (spaceTaken / 5100000).toFixed(5);
+    this.localStorageSpaceTaken = (spaceTakenInBytes / this.maxStorageSpaceInBytes).toFixed(5);
     this.storageSpaceEmitter.emit(this.localStorageSpaceTaken);
 
-    return (spaceTaken / 5100000).toFixed(5);
+    return (spaceTakenInBytes / this.maxStorageSpaceInBytes).toFixed(5);
   }
 
-  updateLocalStorage(): void{
+  updateLocalStorage(): void {
     const videos = JSON.stringify(this.savedVideos);
     localStorage.setItem(this.storageKeys.videos, videos);
     this.getLocalStorageSpaceTaken();
