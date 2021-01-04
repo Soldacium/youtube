@@ -20,7 +20,6 @@ export const favourVideo = createAction(
     props<{ video: Video }>()
 );
 
-
 export const unfavourVideo = createAction(
     '[Videos Page] Unfavour video',
     props<{ video: Video }>()
@@ -30,3 +29,9 @@ export const setVideos = createAction(
     '[Videos Page] Set videos',
     props<{ videos: Video[] }>()
 );
+
+export const setSearchedVideos = createAction(
+    '[Videos Page] Set searched videos',
+    props<{ searchedVideos: Video[]}>()
+);
+

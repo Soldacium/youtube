@@ -9,6 +9,8 @@ import { SearchOptions } from '@models/search-options.model';
 import { VideoTypes } from '@models/video-types.model';
 
 import { Store } from '@ngrx/store';
+import { setVideos, addVideo, deleteVideo, deleteAllVideos, setSearchedVideos } from '@store/actions/videos.actions';
+import { State } from '@store/reducers/videos.reducer';
 
 
 @Injectable({
@@ -16,7 +18,7 @@ import { Store } from '@ngrx/store';
 })
 export class VideoService {
 
-  vids: Observable<Video[]> | undefined;
+  
 
   constructor(
     private storageService: LocalStorageService,
@@ -25,11 +27,17 @@ export class VideoService {
     private store: Store<{videos: Video[]}>) {
       this.savedVideos = this.storageService.getVideosFromLocalStorage();
       this.storageService.getLocalStorageSpaceTaken();
-      this.vids = store.select('videos');
+      this.updateVideosMeetingSearchCriteria();
+      console.log(this.searchedVideos, this.savedVideos);
 
-      this.vids.subscribe(change => {
-        console.log(change);
-      })
+      this.store.dispatch(setVideos({videos: [...this.savedVideos]}));
+      this.store.dispatch(setSearchedVideos({searchedVideos: [...this.searchedVideos]}));
+
+      store.select('videos').subscribe((videoStorage: any) => {
+        this.savedVideos = [...videoStorage.videos];
+        this.searchedVideos = [...videoStorage.searchedVideos];
+        this.updateVideosMeetingSearchCriteria();
+      });
     }
 
   lastPage = 0;
@@ -119,7 +127,8 @@ export class VideoService {
       }
     }
 
-    this.searchedVideos = videosGotten;
+    //this.searchedVideos = [...videosGotten];
+    this.store.dispatch(setSearchedVideos({searchedVideos: [...videosGotten]}));
     this.searchedVideosChange.emit(this.searchedVideos);
     return videosGotten;
   }
@@ -134,6 +143,7 @@ export class VideoService {
       if (videoData){
         const video: Video = this.getVideoApiDataAsVideo(videoData, id, type);
 
+        this.store.dispatch(addVideo({video}));
         this.addVideoToArray(video);
         this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
         this.storageService.updateLocalStorage();
@@ -176,8 +186,10 @@ export class VideoService {
       return;
     }
 
-    this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
-    this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
+    this.store.dispatch(deleteVideo({video}));
+
+    // this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
+    // this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
     this.updateVideosMeetingSearchCriteria();
     this.storageService.updateLocalStorage();
   }
@@ -189,7 +201,6 @@ export class VideoService {
     }
     if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite) {
       this.updateVideosMeetingSearchCriteria();
-      this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
     }
     this.storageService.updateLocalStorage();
   }
@@ -201,7 +212,6 @@ export class VideoService {
     }
     if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite) {
       this.updateVideosMeetingSearchCriteria();
-      this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
     }
     this.storageService.updateLocalStorage();
   }
@@ -209,6 +219,9 @@ export class VideoService {
   clearAllVideos(): void {
     this.searchedVideos = [];
     this.savedVideos = [];
+
+    this.store.dispatch(deleteAllVideos());
+
     this.storageService.savedVideos = this.savedVideos;
     this.updateVideosMeetingSearchCriteria();
     this.storageService.clearLocalStorage();
