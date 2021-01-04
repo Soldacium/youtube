@@ -25,7 +25,7 @@ export class LocalStorageService {
 
   deleteVideoFromLocalStorage(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-    if (video){
+    if (video) {
       this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
       this.updateLocalStorage();
     }
@@ -33,7 +33,7 @@ export class LocalStorageService {
 
   setVideoAsFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-    if (video){
+    if (video) {
       video.favourite = true;
     }
     this.updateLocalStorage();
@@ -41,7 +41,7 @@ export class LocalStorageService {
 
   setVideoAsNotFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-    if (video){
+    if (video) {
       video.favourite = false;
     }
     this.updateLocalStorage();
@@ -56,7 +56,7 @@ export class LocalStorageService {
     let spaceTakenInBytes = 0;
     this.savedVideos.forEach(video => {
       for (const [key, value] of Object.entries(video)) {
-        if (value){
+        if (value) {
           spaceTakenInBytes += value.toString().length;
         }
       }

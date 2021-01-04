@@ -24,7 +24,8 @@
         "@videos/*": ["app/videos/*"],
         "@services/*": ["app/services/*"],
         "@models/*": ["app/models/*"],
-        "@appRoot/*": ["app/*"]
+        "@appRoot/*": ["app/*"],
+        "@store/*": ["app/store/*"]
     }
   },
   "angularCompilerOptions": {

@@ -4,7 +4,13 @@
   "url": "https://github.com/Soldacium/youtube/issues",
   "version": "1.0.0",
   "description": "app to save your favourite youtube or vimeo videos for later, pick favourites,sort and watch however you want",
-  "keywords": ["Angular", "Typescript", "Sass", "Api","Node.js"],
+  "keywords": [
+    "Angular",
+    "Typescript",
+    "Sass",
+    "Api",
+    "Node.js"
+  ],
   "license": "BSD-3-Clause",
   "scripts": {
     "ng": "ng",
@@ -27,10 +33,13 @@
     "@angular/platform-browser": "~11.0.1",
     "@angular/platform-browser-dynamic": "~11.0.1",
     "@angular/router": "~11.0.1",
+    "@ngrx/store": "^10.1.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "google-auth-library": "^6.1.3",
     "googleapis": "^66.0.0",
+    "ini": "^2.0.0",
+    "ngrx-store-localstorage": "^10.1.1",
     "nodemon": "^2.0.6",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
@@ -57,5 +66,3 @@
     "typescript": "~4.0.2"
   }
 }
-
-

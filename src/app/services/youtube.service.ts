@@ -15,7 +15,7 @@ export class YoutubeService {
   getYoutubeVideoData(id: string): Observable<VideoApiData | undefined> {
     return this.http.get<YoutubeApiResponse>('http://localhost:3000/api/youtube/' + id).pipe(
       map((res: YoutubeApiResponse) => {
-        if (res){
+        if (res) {
           return this.getModifiedYoutubeVideoData(res);
         }
         return;

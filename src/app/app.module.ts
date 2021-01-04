@@ -19,6 +19,8 @@ import { MaterialModule } from '@appRoot/material.module';
 import { YoutubeService } from '@services/youtube.service';
 import { VimeoService } from '@services/vimeo.service';
 import { LocalStorageService } from '@services/local-storage.service';
+import { NgRxStoreModule } from './store.module';
+
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { LocalStorageService } from '@services/local-storage.service';
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    NgRxStoreModule,
 
     MaterialModule
   ],

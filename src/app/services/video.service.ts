@@ -8,18 +8,28 @@ import { VideoApiData } from '@models/video-api-data.model';
 import { SearchOptions } from '@models/search-options.model';
 import { VideoTypes } from '@models/video-types.model';
 
+import { Store } from '@ngrx/store';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class VideoService {
 
+  vids: Observable<Video[]> | undefined;
+
   constructor(
     private storageService: LocalStorageService,
     private youtubeService: YoutubeService,
-    private vimeoService: VimeoService) {
+    private vimeoService: VimeoService,
+    private store: Store<{videos: Video[]}>) {
       this.savedVideos = this.storageService.getVideosFromLocalStorage();
       this.storageService.getLocalStorageSpaceTaken();
+      this.vids = store.select('videos');
+
+      this.vids.subscribe(change => {
+        console.log(change);
+      })
     }
 
   lastPage = 0;
@@ -48,7 +58,7 @@ export class VideoService {
   };
 
   updateSearchOptions(typeOfVideos: 'all' | 'vimeo' | 'yt' | 'favourite', sortOrder: 'descending' | 'ascending', videoDisplay: 'blocks' | 'list'): void {
-    if (sortOrder !== this.searchOptions.sort){
+    if (sortOrder !== this.searchOptions.sort) {
       this.sortVideosByDate();
     }
 
@@ -83,6 +93,7 @@ export class VideoService {
 
       case this.videoSearchTypes.vimeo:
         return this.savedVideos.filter(video => video.type === this.videoSearchTypes.vimeo);
+
       default:
         return [];
     }
@@ -91,7 +102,6 @@ export class VideoService {
   getVideosMeetingSearchCriteriaLength(): number {
     return this.videosMeetingSearchCriteria.length;
   }
-
 
 
   getVideosFromPage(page: number, itemsPerPage: number): Video[] {
@@ -104,7 +114,7 @@ export class VideoService {
 
     for (let i = minimumItems; i < minimumItems + itemsPerPage; i++){
       const video = this.videosMeetingSearchCriteria[i];
-      if (video){
+      if (video) {
         videosGotten.push(video);
       }
     }
@@ -124,15 +134,23 @@ export class VideoService {
       if (videoData){
         const video: Video = this.getVideoApiDataAsVideo(videoData, id, type);
 
-        this.savedVideos.push(video);
+        this.addVideoToArray(video);
         this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
         this.storageService.updateLocalStorage();
 
         this.errorEmitter.emit('');
-      }else {
+      } else {
         this.errorEmitter.emit('Video not found');
       }
     });
+  }
+
+  addVideoToArray(video: Video): void {
+    if (this.searchOptions.sort === 'descending') {
+      this.savedVideos.unshift(video);
+    } else{
+      this.savedVideos.push(video);
+    }
   }
 
   private getVideoApiDataAsVideo(videoApiData: VideoApiData, id: string, type: VideoTypes): Video {
@@ -153,20 +171,23 @@ export class VideoService {
 
   deleteVideo(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-    if (video){
-      this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
-      this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
-      this.updateVideosMeetingSearchCriteria();
-      this.storageService.updateLocalStorage();
+
+    if (!video) {
+      return;
     }
+
+    this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
+    this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
+    this.updateVideosMeetingSearchCriteria();
+    this.storageService.updateLocalStorage();
   }
 
   setVideoAsFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-    if (video){
+    if (video) {
       video.favourite = true;
     }
-    if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite){
+    if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite) {
       this.updateVideosMeetingSearchCriteria();
       this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
     }
@@ -175,10 +196,10 @@ export class VideoService {
 
   setVideoAsNotFavourite(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
-    if (video){
+    if (video) {
       video.favourite = false;
     }
-    if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite){
+    if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite) {
       this.updateVideosMeetingSearchCriteria();
       this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
     }

@@ -15,7 +15,7 @@ export class VimeoService {
   getVimeoVideoData(id: string): Observable<VideoApiData | undefined> {
     return this.http.get<VimeoApiResponse>('http://localhost:3000/api/vimeo/' + id).pipe(
       map((res: VimeoApiResponse) => {
-        if (res.uri){
+        if (res.uri) {
           return this.getModifiedVimeoVideoData(res);
         }
         return;

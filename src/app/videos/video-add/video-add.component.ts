@@ -13,6 +13,8 @@ export class VideoAddComponent implements OnInit {
   searchInput = '';
   videoType: VideoTypes = 'yt';
   error = '';
+  youtubeVideoIdLength = 11;
+  vimeoVideoIdLength = 9;
 
   constructor(private videoService: VideoService) { }
 
@@ -32,18 +34,18 @@ export class VideoAddComponent implements OnInit {
 
   addVideo(): void {
     const videoID = this.modifySearchInput();
-    if (videoID){
+    if (videoID) {
       this.videoService.addVideo(videoID, this.videoType);
     }
   }
 
   modifySearchInput(): string | undefined {
     let newId: string;
-    if (this.videoType === 'yt' && this.searchInput.length >= 11){
-      newId = this.searchInput.substr(this.searchInput.length - 11);
-    } else if (this.videoType === 'vimeo' && this.searchInput.length >= 9){
-      newId = this.searchInput.substr(this.searchInput.length - 9);
-    } else{
+    if (this.videoType === 'yt' && this.searchInput.length >= this.youtubeVideoIdLength) {
+      newId = this.searchInput.substr(this.searchInput.length - this.youtubeVideoIdLength);
+    } else if (this.videoType === 'vimeo' && this.searchInput.length >= this.vimeoVideoIdLength) {
+      newId = this.searchInput.substr(this.searchInput.length - this.vimeoVideoIdLength);
+    } else {
       this.error = 'Must be minimum 9 characters for Vimeo and 11 for YT';
       return;
     }

@@ -26,7 +26,7 @@
             </div>
             <div class="info" [ngClass]='video.type ==="yt"?"yt":"vimeo"'>
                 <div class='info-title'>{{video.title}}</div>
-                <div class='info-views' *ngIf='video.views'>{{video.views}} <mat-icon>remove_red_eye</mat-icon></div>
+                <div class='info-views' *ngIf='video.views && video.views !== "0"'>{{video.views}} <mat-icon>remove_red_eye</mat-icon></div>
             </div>            
         </div>
     
