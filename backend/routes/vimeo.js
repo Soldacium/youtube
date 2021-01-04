@@ -9,12 +9,6 @@ let client = new Vimeo(
     keys.vimeoKeys.clientSecret,
     keys.vimeoKeys.accessToken);
 
-    /*
-    'clientID',
-    'client_secret',
-    'access_token');
-    */
-
 
 router.get('/:id',(req,res,next) => {  
     client.request({
@@ -25,9 +19,7 @@ router.get('/:id',(req,res,next) => {
           console.log(error);
         }
         
-        res.status(200).json({
-            data: body
-        });
+        res.status(200).json(body);
     })
     
 
