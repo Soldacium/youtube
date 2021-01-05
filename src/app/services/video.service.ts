@@ -26,19 +26,14 @@ export class VideoService {
     private youtubeService: YoutubeService,
     private vimeoService: VimeoService,
     private store: Store<{videos: Video[]}>) {
-      this.savedVideos = this.storageService.getVideosFromLocalStorage();
-      this.storageService.getLocalStorageSpaceTaken();
       this.updateVideosMeetingSearchCriteria();
-      // console.log(this.searchedVideos, this.savedVideos);
 
       this.store.dispatch(setVideos({videos: [...this.savedVideos]}));
-      // this.store.dispatch(setSearchedVideos({searchedVideos: [...this.searchedVideos]}));
 
       store.select('videos').subscribe((videoStorage: any) => {
         this.savedVideos = [...videoStorage.videos];
         this.searchedVideos = [...videoStorage.searchedVideos];
         this.videosMeetingSearchCriteria = [...videoStorage.videosMeetingSearchCriteria];
-        // this.updateVideosMeetingSearchCriteria();
       });
     }
 
@@ -87,7 +82,6 @@ export class VideoService {
 
   updateVideosMeetingSearchCriteria(): void {
     this.store.dispatch(setVideosMeetingSearchCriteria({acceptableVideos: this.getVideosBySearchOption(this.searchOptions.videosAllowed)}));
-    // this.videosMeetingSearchCriteria = this.getVideosBySearchOption(this.searchOptions.videosAllowed);
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
 
@@ -133,7 +127,6 @@ export class VideoService {
     console.log(videosGotten, this.savedVideos);
 
     this.store.dispatch(setSearchedVideos({searchedVideos: [...videosGotten]}));
-    this.searchedVideosChange.emit([...videosGotten]);
     return videosGotten;
   }
 
@@ -149,7 +142,6 @@ export class VideoService {
 
         this.store.dispatch(addVideo({video}));
         this.updateVideosMeetingSearchCriteria();
-        this.storageService.updateLocalStorage();
 
         this.errorEmitter.emit('');
       } else {
@@ -198,11 +190,8 @@ export class VideoService {
     }
 
     this.store.dispatch(deleteVideo({video}));
-
-    // this.savedVideos.splice(this.savedVideos.indexOf(video), 1);
-    // this.searchedVideos.splice(this.searchedVideos.indexOf(video), 1);
     this.updateVideosMeetingSearchCriteria();
-    this.storageService.updateLocalStorage();
+
   }
 
   setVideoAsFavourite(id: string): void {
@@ -212,12 +201,6 @@ export class VideoService {
     if (video) {
       this.store.dispatch(favourVideo({video}));
     }
-    /*
-    if (this.searchOptions.videosAllowed === this.videoSearchTypes.favourite) {
-      this.updateVideosMeetingSearchCriteria();
-    }
-    */
-    this.storageService.updateLocalStorage();
   }
 
   setVideoAsNotFavourite(id: string): void {
@@ -226,7 +209,7 @@ export class VideoService {
     if (video) {
       this.store.dispatch(unfavourVideo({video}));
     }
-    this.storageService.updateLocalStorage();
+
   }
 
   clearAllVideos(): void {
@@ -237,7 +220,7 @@ export class VideoService {
 
     this.storageService.savedVideos = this.savedVideos;
     this.updateVideosMeetingSearchCriteria();
-    this.storageService.clearLocalStorage();
+    
   }
 
 }
