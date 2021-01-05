@@ -35,3 +35,8 @@ export const setSearchedVideos = createAction(
     props<{ searchedVideos: Video[]}>()
 );
 
+export const setVideosMeetingSearchCriteria = createAction(
+    '[Videos Page] Set videos meeting search criteria',
+    props<{ acceptableVideos: Video[]}>()
+);
+

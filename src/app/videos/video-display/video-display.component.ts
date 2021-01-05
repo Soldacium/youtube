@@ -6,6 +6,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PageEvent } from '@angular/material/paginator';
 import { VimeoService } from '@services/vimeo.service';
 import { SearchOptions } from '@models/search-options.model';
+import { Store } from '@ngrx/store';
+import { State } from '@store/reducers/videos.reducer';
 
 @Component({
   selector: 'app-video-display',
@@ -16,7 +18,8 @@ export class VideoDisplayComponent implements OnInit {
 
   constructor(
     private videoService: VideoService,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer,
+    private store: Store<State>) { } // Store<{videos: Video[]}>
 
   videos: Video[] = [];
 
@@ -40,8 +43,8 @@ export class VideoDisplayComponent implements OnInit {
   }
 
   getVideos(): void  {
-    this.videoService.searchedVideosChange.subscribe((videos: Video[]) => {
-      this.videos = videos;
+    this.store.select('videos').subscribe((videoStorage: any) => {
+      this.videos = [...videoStorage.searchedVideos];
       this.videosMeetingSearchCriteriaLength = this.videoService.getVideosMeetingSearchCriteriaLength();
     });
     this.videoService.getVideosFromPage(this.page, this.itemsPerPage);
@@ -77,7 +80,7 @@ export class VideoDisplayComponent implements OnInit {
     this.videoPlayingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videoPlayers[video.type] + video.id);
   }
 
-  closeVideo(close: boolean): void {
+  closeVideo(): void {
     this.openPlayer = false;
     this.videoPlayingUrl = '';
   }
