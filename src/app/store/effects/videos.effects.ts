@@ -25,8 +25,11 @@ export class VideoEffects {
     exhaustMap(action =>
       this.videoService.addVideo(action.id, action.videoType).pipe(
         map((video) => {
-            // this.videoService.updateVideosMeetingSearchCriteria();
-            return video ? VideoActions.addVideo({video}) : VideoActions.addVideo({video: emptyVideo});
+            if (video){
+              return VideoActions.addVideo({video});
+            }
+            this.videoService.errorEmitter.emit('video not found');
+            return VideoActions.addVideo({video: emptyVideo});
           }
         )
       )

@@ -33,16 +33,22 @@ export class VideoService {
 
       store.select('videos').subscribe((videoStorage: any) => {
         // console.log(videoStorage);
-        const prevLength = this.savedVideos.length;
+        const prevLengthVideos = this.savedVideos.length;
+        const prevLengthCriteriaVideos = this.videosMeetingSearchCriteria.length;
 
         this.savedVideos = [...videoStorage.videos];
         this.searchedVideos = [...videoStorage.searchedVideos];
         this.videosMeetingSearchCriteria = [...videoStorage.videosMeetingSearchCriteria];
 
-        if(prevLength !== videoStorage.videos.length){
+        if (prevLengthVideos !== videoStorage.videos.length) {
           this.updateVideosMeetingSearchCriteria();
-          console.log(videoStorage);
         }
+
+        if (prevLengthCriteriaVideos !== videoStorage.videosMeetingSearchCriteria.length) {
+          this.updateVideosMeetingSearchCriteria();
+        }
+
+        console.log(videoStorage);
 
       });
     }
@@ -91,7 +97,7 @@ export class VideoService {
   }
 
   updateVideosMeetingSearchCriteria(): void {
-    console.log(this.getVideosBySearchOption(this.searchOptions.videosAllowed), this.savedVideos)
+    console.log(this.getVideosBySearchOption(this.searchOptions.videosAllowed), this.savedVideos);
     this.store.dispatch(setVideosMeetingSearchCriteria({acceptableVideos: this.getVideosBySearchOption(this.searchOptions.videosAllowed)}));
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
@@ -135,7 +141,7 @@ export class VideoService {
     }
 
     this.store.dispatch(setSearchedVideos({searchedVideos: [...videosGotten]}));
-    console.log(videosGotten);
+    console.log(videosGotten, this.savedVideos, this.videosMeetingSearchCriteria);
     return videosGotten;
   }
 
