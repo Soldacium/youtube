@@ -185,8 +185,8 @@ export class VideoService {
   }
 
   clearAllVideos(): void {
-    this.searchedVideos = [];
-    this.savedVideos = [];
+    // this.searchedVideos = [];
+    // this.savedVideos = [];
 
     this.store.dispatch(deleteAllVideos());
 

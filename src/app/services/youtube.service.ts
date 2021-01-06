@@ -20,7 +20,6 @@ export class YoutubeService {
         if (res) {
           return this.getModifiedYoutubeVideoData(res, id, type);
         }
-
         return;
       })
     );

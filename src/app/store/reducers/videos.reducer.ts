@@ -54,7 +54,12 @@ const videosReducer = createReducer(
             ...state.videos.slice(state.videos.indexOf(video) + 1),
         ]
     })),
-    on(VideoActions.deleteAllVideos, (state) => ({...state, videos: []})),
+    on(VideoActions.deleteAllVideos, (state) => ({
+        ...state,
+        videos: [],
+        searchedVideos: [],
+        videosMeetingSearchCriteria: []
+    })),
     on(VideoActions.setVideos, (state, {videos}) => ({
         ...state,
         videos
