@@ -4,7 +4,10 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 // const reducers: ActionReducerMap<State> = {todos, visibilityFilter};
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['videos'], rehydrate: true, storage: localStorage})(reducer);
+  return localStorageSync({
+    keys: [{videos: ['videos', 'searchedVideos', 'videosMeetingSearchCriteria']}],
+    rehydrate: true,
+    storage: localStorage})(reducer);
 }
 
 export const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];

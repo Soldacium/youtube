@@ -1,5 +1,6 @@
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
+import { State } from '@appRoot/store/reducers/videos.reducer';
 import { Video } from '@models/video.model';
 import { Store } from '@ngrx/store';
 
@@ -14,9 +15,10 @@ export class LocalStorageService {
   savedVideos: Video[] = [];
   storageSpaceEmitter = new EventEmitter<string>();
 
-  constructor(private store: Store<{videos: Video[]}>){
+  constructor(private store: Store<State>){
     store.select('videos').subscribe((storage: any) => {
       this.savedVideos = [...storage.videos];
+      // console.log(this.savedVideos);
       this.getLocalStorageSpaceTaken();
     });
   }

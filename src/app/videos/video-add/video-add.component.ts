@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { getVideoFromAPI } from '@appRoot/store/actions/videos.actions';
+import { State } from '@appRoot/store/reducers/videos.reducer';
 import { VideoTypes } from '@models/video-types.model';
+import { Store } from '@ngrx/store';
 import { VideoService } from '@services/video.service';
 
 @Component({
@@ -16,7 +19,7 @@ export class VideoAddComponent implements OnInit {
   youtubeVideoIdLength = 11;
   vimeoVideoIdLength = 9;
 
-  constructor(private videoService: VideoService) { }
+  constructor(private videoService: VideoService, private store: Store<State>) { }
 
   ngOnInit(): void {
     this.getErrorsSubscriber();
@@ -35,7 +38,8 @@ export class VideoAddComponent implements OnInit {
   addVideo(): void {
     const videoID = this.modifySearchInput();
     if (videoID) {
-      this.videoService.addVideo(videoID, this.videoType);
+      this.store.dispatch(getVideoFromAPI({id: videoID, videoType: this.videoType}));
+      // this.videoService.addVideo(videoID, this.videoType);
     }
   }
 

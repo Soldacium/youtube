@@ -9,7 +9,8 @@ import { SearchOptions } from '@models/search-options.model';
 import { VideoTypes } from '@models/video-types.model';
 
 import { Store } from '@ngrx/store';
-import { setVideos, addVideo, deleteVideo, deleteAllVideos, setSearchedVideos, favourVideo, unfavourVideo, setVideosMeetingSearchCriteria } from '@store/actions/videos.actions';
+import { setVideos, addVideo, deleteVideo, deleteAllVideos, setSearchedVideos,
+favourVideo, unfavourVideo, setVideosMeetingSearchCriteria } from '@store/actions/videos.actions';
 import { State } from '@store/reducers/videos.reducer';
 import { reverseSortOrder } from '@appRoot/store/actions/sort-videos.actions';
 
@@ -25,15 +26,24 @@ export class VideoService {
     private storageService: LocalStorageService,
     private youtubeService: YoutubeService,
     private vimeoService: VimeoService,
-    private store: Store<{videos: Video[]}>) {
+    private store: Store<State>) {
       this.updateVideosMeetingSearchCriteria();
 
       this.store.dispatch(setVideos({videos: [...this.savedVideos]}));
 
       store.select('videos').subscribe((videoStorage: any) => {
+        // console.log(videoStorage);
+        const prevLength = this.savedVideos.length;
+
         this.savedVideos = [...videoStorage.videos];
         this.searchedVideos = [...videoStorage.searchedVideos];
         this.videosMeetingSearchCriteria = [...videoStorage.videosMeetingSearchCriteria];
+
+        if(prevLength !== videoStorage.videos.length){
+          this.updateVideosMeetingSearchCriteria();
+          console.log(videoStorage);
+        }
+
       });
     }
 
@@ -81,6 +91,7 @@ export class VideoService {
   }
 
   updateVideosMeetingSearchCriteria(): void {
+    console.log(this.getVideosBySearchOption(this.searchOptions.videosAllowed), this.savedVideos)
     this.store.dispatch(setVideosMeetingSearchCriteria({acceptableVideos: this.getVideosBySearchOption(this.searchOptions.videosAllowed)}));
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
@@ -108,7 +119,6 @@ export class VideoService {
     return this.videosMeetingSearchCriteria.length;
   }
 
-
   getVideosFromPage(page: number, itemsPerPage: number): Video[] {
 
     this.lastItemsPerPage = itemsPerPage;
@@ -124,63 +134,18 @@ export class VideoService {
       }
     }
 
-    console.log(videosGotten, this.savedVideos);
-
     this.store.dispatch(setSearchedVideos({searchedVideos: [...videosGotten]}));
+    console.log(videosGotten);
     return videosGotten;
   }
 
+  addVideo(id: string, type: VideoTypes): Observable<Video | undefined> {
 
-  addVideo(id: string, type: VideoTypes): void {
+    const videoDataObservable: Observable<Video | undefined> =
+    type === 'yt' ? this.youtubeService.getYoutubeVideoData(id, type) : this.vimeoService.getVimeoVideoData(id, type);
 
-    const videoDataObservable: Observable<VideoApiData | undefined> =
-    type === 'yt' ? this.youtubeService.getYoutubeVideoData(id) : this.vimeoService.getVimeoVideoData(id);
-
-    videoDataObservable.subscribe((videoData: VideoApiData | undefined) => {
-      if (videoData){
-        const video: Video = this.getVideoApiDataAsVideo(videoData, id, type);
-
-        this.store.dispatch(addVideo({video}));
-        this.updateVideosMeetingSearchCriteria();
-
-        this.errorEmitter.emit('');
-      } else {
-        this.errorEmitter.emit('Video not found');
-      }
-    });
+    return videoDataObservable;
   }
-
-  private getVideoApiDataAsVideo(videoApiData: VideoApiData, id: string, type: VideoTypes): Video {
-    const video: Video = {
-      id,
-      type,
-      favourite: false,
-      title: videoApiData.title,
-      thumbnail: videoApiData.thumbnail,
-      views: videoApiData.views ? videoApiData.views.toString() : '',
-      modifyDate: new Date().toLocaleDateString('en-GB')
-    };
-
-    return video;
-  }
-
-  private addVideoToArray(video: Video): void {
-    if (this.searchOptions.sort === 'descending') {
-      this.savedVideos.unshift(video);
-    } else{
-      this.savedVideos.push(video);
-    }
-  }
-
-  private checkIfVideoAlreadyInArray(video: Video): boolean {
-    const searchedVideo = this.savedVideos.filter(savedVideo => savedVideo.id === video.id);
-    if (searchedVideo) {
-      return true;
-    }
-    return false;
-  }
-
-
 
   deleteVideo(id: string): void {
     const video = this.savedVideos.find(savedVideo => savedVideo.id === id);
@@ -200,6 +165,7 @@ export class VideoService {
 
     if (video) {
       this.store.dispatch(favourVideo({video}));
+      this.updateVideosMeetingSearchCriteria();
     }
   }
 
@@ -208,8 +174,8 @@ export class VideoService {
 
     if (video) {
       this.store.dispatch(unfavourVideo({video}));
+      this.updateVideosMeetingSearchCriteria();
     }
-
   }
 
   clearAllVideos(): void {
@@ -218,9 +184,7 @@ export class VideoService {
 
     this.store.dispatch(deleteAllVideos());
 
-    this.storageService.savedVideos = this.savedVideos;
-    this.updateVideosMeetingSearchCriteria();
-    
+    // this.storageService.savedVideos = this.savedVideos;
   }
 
 }

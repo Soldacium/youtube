@@ -5,8 +5,8 @@ import * as SortActions from '../actions/sort-videos.actions';
 
 export interface State {
   videos: Video[];
-  videosMeetingSearchCriteria: Video[];
   searchedVideos: Video[];
+  videosMeetingSearchCriteria: Video[];
 }
 
 export const initialState: State = {
@@ -17,13 +17,17 @@ export const initialState: State = {
 
 const videosReducer = createReducer(
     initialState,
-    on(VideoActions.addVideo, (state, {video}) => ({
-        ...state,
-        videos: [
-            ...state.videos,
-            video
-        ]
-    })),
+    on(VideoActions.addVideo, (state, {video}) => {
+    if (video.id !== ''){
+        return({
+            ...state,
+            videos: [
+                ...state.videos,
+                video
+            ]
+        });
+    }else{ return({...state}); }
+    }),
     on(VideoActions.deleteVideo, (state, {video}) => ({
         ...state,
         videos: [

@@ -23,6 +23,7 @@ export class VideoDisplayComponent implements OnInit {
 
   videos: Video[] = [];
 
+
   videoPlayingUrl!: SafeResourceUrl;
   openPlayer = false;
 

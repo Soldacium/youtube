@@ -1,10 +1,20 @@
+import { VideoTypes } from '@models/video-types.model';
 import { Video } from '@models/video.model';
 import { createAction, props } from '@ngrx/store';
+
+export const loadVideos = createAction(
+    '[Videos Page] Load videos'
+);
 
 export const addVideo = createAction(
   '[Videos Page] Add video',
   props<{ video: Video }>()
 );
+
+export const getVideoFromAPI = createAction(
+    '[Videos Page] Get video from API',
+    props<{ id: string; videoType: VideoTypes }>()
+  );
 
 export const deleteVideo = createAction(
     '[Videos Page] Delete video',
