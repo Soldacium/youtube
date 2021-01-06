@@ -15,9 +15,6 @@ import { metaReducers } from '@store/reducers/meta-reducers.reducer';
         CommonModule,
         StoreModule.forRoot({videos: fromVideos.reducer, searchedVideos: fromVideos.reducer}, {metaReducers}),
         EffectsModule.forRoot([VideoEffects])
-    ],
-    exports: [
-
     ]
 })
 export class NgRxStoreModule { }

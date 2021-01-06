@@ -18,7 +18,6 @@ router.get('/:id',(req,res,next) => {
         if (error) {
           console.log(error);
         }
-        
         res.status(200).json(body);
     })
     

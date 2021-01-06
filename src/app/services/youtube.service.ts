@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { VideoApiData } from '@models/video-api-data.model';
 import { VideoTypes } from '@models/video-types.model';
 import { Video } from '@models/video.model';
 import { YoutubeApiResponse } from '@models/youtube-api-reponse.model';

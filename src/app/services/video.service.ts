@@ -1,10 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Video } from '@models/video.model';
 import { Observable } from 'rxjs';
-import { LocalStorageService } from './local-storage.service';
 import { YoutubeService } from './youtube.service';
 import { VimeoService } from './vimeo.service';
-import { VideoApiData } from '@models/video-api-data.model';
 import { SearchOptions } from '@models/search-options.model';
 import { VideoTypes } from '@models/video-types.model';
 
@@ -20,37 +18,11 @@ import { reverseSortOrder } from '@appRoot/store/actions/sort-videos.actions';
 })
 export class VideoService {
 
-
-
   constructor(
-    private storageService: LocalStorageService,
     private youtubeService: YoutubeService,
     private vimeoService: VimeoService,
     private store: Store<State>) {
-      this.updateVideosMeetingSearchCriteria();
-
-      this.store.dispatch(setVideos({videos: [...this.savedVideos]}));
-
-      store.select('videos').subscribe((videoStorage: any) => {
-        // console.log(videoStorage);
-        const prevLengthVideos = this.savedVideos.length;
-        const prevLengthCriteriaVideos = this.videosMeetingSearchCriteria.length;
-
-        this.savedVideos = [...videoStorage.videos];
-        this.searchedVideos = [...videoStorage.searchedVideos];
-        this.videosMeetingSearchCriteria = [...videoStorage.videosMeetingSearchCriteria];
-
-        if (prevLengthVideos !== videoStorage.videos.length) {
-          this.updateVideosMeetingSearchCriteria();
-        }
-
-        if (prevLengthCriteriaVideos !== videoStorage.videosMeetingSearchCriteria.length) {
-          this.updateVideosMeetingSearchCriteria();
-        }
-
-        console.log(videoStorage);
-
-      });
+      this.setupStoreSubscription();
     }
 
   lastPage = 0;
@@ -78,6 +50,28 @@ export class VideoService {
     favourite: 'fav'
   };
 
+  private setupStoreSubscription(): void {
+    this.updateVideosMeetingSearchCriteria();
+    this.store.dispatch(setVideos({videos: [...this.savedVideos]}));
+
+    this.store.select('videos').subscribe((videoStorage: any) => {
+      const prevLengthVideos = this.savedVideos.length;
+      const prevLengthCriteriaVideos = this.videosMeetingSearchCriteria.length;
+
+      this.savedVideos = [...videoStorage.videos];
+      this.searchedVideos = [...videoStorage.searchedVideos];
+      this.videosMeetingSearchCriteria = [...videoStorage.videosMeetingSearchCriteria];
+
+      if (prevLengthVideos !== videoStorage.videos.length) {
+        this.updateVideosMeetingSearchCriteria();
+      }
+
+      if (prevLengthCriteriaVideos !== videoStorage.videosMeetingSearchCriteria.length) {
+        this.updateVideosMeetingSearchCriteria();
+      }
+    });
+  }
+
   updateSearchOptions(typeOfVideos: 'all' | 'vimeo' | 'yt' | 'favourite', sortOrder: 'descending' | 'ascending', videoDisplay: 'blocks' | 'list'): void {
     if (sortOrder !== this.searchOptions.sort) {
       this.sortVideosByDate();
@@ -92,12 +86,11 @@ export class VideoService {
     this.updateVideosMeetingSearchCriteria();
   }
 
-  sortVideosByDate(): void {
+  private sortVideosByDate(): void {
     this.store.dispatch(reverseSortOrder());
   }
 
-  updateVideosMeetingSearchCriteria(): void {
-    console.log(this.getVideosBySearchOption(this.searchOptions.videosAllowed), this.savedVideos);
+  private updateVideosMeetingSearchCriteria(): void {
     this.store.dispatch(setVideosMeetingSearchCriteria({acceptableVideos: this.getVideosBySearchOption(this.searchOptions.videosAllowed)}));
     this.getVideosFromPage(this.lastPage, this.lastItemsPerPage);
   }
@@ -126,7 +119,6 @@ export class VideoService {
   }
 
   getVideosFromPage(page: number, itemsPerPage: number): Video[] {
-
     this.lastItemsPerPage = itemsPerPage;
     this.lastPage = page;
 
@@ -141,7 +133,6 @@ export class VideoService {
     }
 
     this.store.dispatch(setSearchedVideos({searchedVideos: [...videosGotten]}));
-    console.log(videosGotten, this.savedVideos, this.videosMeetingSearchCriteria);
     return videosGotten;
   }
 
@@ -162,7 +153,6 @@ export class VideoService {
 
     this.store.dispatch(deleteVideo({video}));
     this.updateVideosMeetingSearchCriteria();
-
   }
 
   setVideoAsFavourite(id: string): void {
@@ -185,12 +175,7 @@ export class VideoService {
   }
 
   clearAllVideos(): void {
-    // this.searchedVideos = [];
-    // this.savedVideos = [];
-
     this.store.dispatch(deleteAllVideos());
-
-    // this.storageService.savedVideos = this.savedVideos;
   }
 
 }

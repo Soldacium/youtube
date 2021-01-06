@@ -18,7 +18,6 @@ export class LocalStorageService {
   constructor(private store: Store<State>){
     store.select('videos').subscribe((storage: any) => {
       this.savedVideos = [...storage.videos];
-      // console.log(this.savedVideos);
       this.getLocalStorageSpaceTaken();
     });
   }
